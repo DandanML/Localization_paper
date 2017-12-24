@@ -114,25 +114,25 @@
 
 \begin{abstract}
 
-As cellular networks like 4G~LTE networks get more and more sophisticated, mobiles
-also measure and send enormous amount of mobile measurement data (in
-TBs/week/metropoliton) during every call and session. The mobile measurement records
-are saved in data center for further analysis and mining, however, these measurement
-records are not geo-tagged because the measurement procedures are implemented in
-mobile LTE stack. Geo-tagging (or localizing) the stored measurement record is a
-fundamental building block towards network analytics and troubleshooting since the
-measurement records contain  rich information on call quality, latency, throughput,
-signal quality, error codes etc. In this work, our goal is to localize these mobile
-measurement records. Precisely, we answer the following question: {\em what was the
-location of the mobile when it sent a given measurement record?} We design and
-implement novel machine learning based algorithms to infer whether a mobile was
-outdoor and if so, it infers the latitude-longitude associated with the measurement
-record. The key technical challenge comes from the fact that measurement records do
-not contain sufficient information required for triangulation or RF fingerprinting
-based techniques to work by themselves. Experiments performed with real data sets
-from an operational 4G network in a major metropolitan show that, the median accuracy
-of our proposed solution is around 20~m for outdoor mobiles and outdoor
-classification accuracy is more than $98\%$.
+% As cellular networks like 4G~LTE networks get more and more sophisticated, mobiles
+% also measure and send enormous amount of mobile measurement data (in
+% TBs/week/metropoliton) during every call and session. The mobile measurement records
+% are saved in data center for further analysis and mining, however, these measurement
+% records are not geo-tagged because the measurement procedures are implemented in
+% mobile LTE stack. Geo-tagging (or localizing) the stored measurement record is a
+% fundamental building block towards network analytics and troubleshooting since the
+% measurement records contain  rich information on call quality, latency, throughput,
+% signal quality, error codes etc. In this work, our goal is to localize these mobile
+% measurement records. Precisely, we answer the following question: {\em what was the
+% location of the mobile when it sent a given measurement record?} We design and
+% implement novel machine learning based algorithms to infer whether a mobile was
+% outdoor and if so, it infers the latitude-longitude associated with the measurement
+% record. The key technical challenge comes from the fact that measurement records do
+% not contain sufficient information required for triangulation or RF fingerprinting
+% based techniques to work by themselves. Experiments performed with real data sets
+% from an operational 4G network in a major metropolitan show that, the median accuracy
+% of our proposed solution is around 20~m for outdoor mobiles and outdoor
+% classification accuracy is more than $98\%$.
 
 \end{abstract}
 
@@ -216,6 +216,7 @@ Section~\ref{sec:concl}.
 
 \section{Relevant 5G Terminologies}
 \label{sec:bg}
+NOTE: This section needs to be updated. Now, it is copied from previous paper, thus, it is about LTE.
 
 Though our techniques could apply to any future cellular system, we use LTE
 terminologies for convenience. The terminologies~\cite{ltebook} relevant for our purpose are
@@ -299,11 +300,6 @@ more than two cells in an LUMD record.
 \section{Problem Statement} 
 \label{sec:ps}
 
-In this paper, we focus on one isolated cell in 5G network, which is the measurement report
-only has the information of the serving cell. In the field, when we have multiple cells, the additional
-information on the measruement report from neigboring cells can be easily incoorbated into the proposed algorithm and improve the 
-localization accuary.
-
 Consider in an 5G network, mobiles travel along a road network represented by a graph $G_r=(V,E)$ where $V$
 denotes graph nodes represented by a latitude-longitude tuple and $E$ denotes
 valid direct path between two nodes.
@@ -357,7 +353,8 @@ The goal is to infer the hidden state from the observations based on
 prior knowledge about the transition probabilities between hidden states and
 observations in the states.
 
- In particle filter based localization algorithm $LocalizeUEpf$ we maintain set
+In this paper, we use particle filter to solve the localization problem presented in HMM. 
+ In the proposed algorithm $LocalizeUEpf$ we maintain set
  of $N$ particles and their corresponding weights or likelihoods where each
  particle represents a sequence of possible location of the UE. Recall that $t_i$
  denotes the time at which the UE sends the LUMD record $\tilde{R}_i$ and $v_i$ is
@@ -380,190 +377,162 @@ probabilities model how transition happens from one hidden state
 to another. 
 We assume a suitable mobility model of the mobile which determines how it moves
 along the graph $G_r$ and also helps us to calculate the above probabilities. We
-assume that the mobile updates its speed according to the following equation.
+assume that the mobile updates its speed according to Gauss-Markov Mobility Model ~\cite{Camp2002}.
 
 \begin{align}
-v(t_i) & = e^{-\beta \tau} v(t_{i-1}) + (1-e^{-\beta \tau}) \mathcal{N}(\mu,\sigma^2)
-\label{eqn:tranVel}
+S_t = \alpha S_{t-1}+(1-\alpha)\bar{S}+\sqrt{(1-\alpha^2)}S_{x_{t-1}}
+\label{eqn:speed}
+\end{align}
+\begin{align}
+d_t = \alpha d_{t-1}+(1-\alpha)\bar{d}+\sqrt{(1-\alpha^2)}d_{x_{t-1}}
+\label{eqn:speed}
 \end{align}
 
-where $\tau = t_i-t_{i-1},$ $\mathcal{N}(\mu,\sigma^2)$ is initial velocity
-distribution and $\beta$ is a scaling constant. Let $d_i =
-v(t_{i}) \times \tau$ and $x_{i}$ be a point on the graph $G$ such that
-$d_G(x_i,x_{i-1}) = d_i$ along a path (if there is no such point we round $d_i$
-to the nearest such point). 
+ where $S_t$ and $d_t$ are the new speed and direction of the mobile at time interval t. $S_{t-1}$ and $d_{t-1}$
+ are random variables from a Gaussian distribution with mean $\bar{S}$ and $\bar{d}$.
+ 
+ At each time interval the next location is calculated based on the current location, speed, and direction of movement.
+Specifically, at time interval t, a mobile's position is given by the equations.
+
+\begin{align}
+	x_t = x_{t-1} +S_{t-1}cos(d_{t-1})
+\label{eqn:mobilitymodelx}
+\end{align}
+\begin{align}
+y_t = y_{t-1} +S_{t-1}sin(d_{t-1})
+\label{eqn:mobilitymodely}
+\end{align}
+
+where ($x_t$,$y_t$) and ($x_{t-1}$,$y_{t-1}$) are the x and y coordinates of the mobile’s position 
+at the $t$th and ($t-1$) st time intervals, respectively.
 
 \begin{algorithm}
 \caption{$LocalizeUEpf(\mathcal{D}_{tr},\mathcal{C},G,N_{th})$}
 \label{alg:LocalizeUEpf}
 \begin{algorithmic}[1]
-
+\State Offline inference based on training data. This does not need real time processing.
 \State Sample $N$ particles $\mathcal{P}_j = \{\hat{x}_1^{(j)},\hat{v}_1^{(j)}\},$ $j=1,\hdots , N$ 
 from prior distribution $p(\tilde{x}_1, \tilde{v}_1|G)$ 
 
-\State Initialize importance weights $\hat{w}_1^{(j)} \gets p(\tilde{R}_1|\hat{x}_1^{(j)}, \mathcal{C}),$ $j=1,\hdots , N$
+\State Initialize importance weights $\hat{w}_1^{(n)} \gets p(\tilde{R}^1_1,\tilde{R}^2_1,\tilde{R}^3_1,\tilde{R}^4_1, \tilde{B}^1_1, \tilde{B}^2_1, \tilde{B}^3_1, \tilde{B}^4_1|\hat{x}_1^{(n)}, \mathcal{C}),$ $n=1,\hdots , N$
 
-\State Normalize $w_1^{(j)} \gets \hat{w}_1^{(j)}/\sum_{l=1}^N \hat{w}_1^{(l)},$ $j=1,\hdots , N$
+\State Normalize $w_1^{(n)} \gets \hat{w}_1^{(n)}/\sum_{l=1}^N \hat{w}_1^{(l)},$ $n=1,\hdots , N$
 
 \For{$i = 2$ to $m$}
-	\For{$j=1$ to $N$}
-		\State Sample $\hat{x}_i^{(j)}$ from distribution $p(\hat{x}_i^{(j)}|\hat{x}_{i-1}^{(j)},\hat{v}_{i-1}^{(j)},G)$
-		\State Update weight $\hat{w}_i^{(j)} \gets \hat{w}_{i-1}^{(j)} \times p(\tilde{R}_i|\hat{x}_{i}^{(j)},\mathcal{C})$ 
-		\State Update speed $\hat{v}_i^{(j)} = d_G(\hat{x}_i^{(j)},\hat{x}_{i-1}^{(j)})/(T_i - T_{i-1})$
-		\State $\mathcal{P}_j \gets \mathcal{P}_j \cup \{\hat{x}_i^{(j)},\hat{v}_i^{(j)}\}$
+	\For{$n=1$ to $N$}
+		\State Sample $\hat{x}_i^{(n)}$ based on Gauss-Markov model in ~(\ref{eqn:mobilitymodelx}) and ~(\ref{eqn:mobilitymodely}).
+		\State Update weight $\hat{w}_i^{(n)} \gets \hat{w}_{i-1}^{(n)} \times p(\tilde{R}^1_i, \tilde{R}^2_i,\tilde{R}^3_i,\tilde{R}^4_i, \tilde{B}^1_i, \tilde{B}^2_i, \tilde{B}^3_i, \tilde{B}^4_i|\hat{x}_{i}^{(n)},\mathcal{C})$ 
 	\EndFor
-	\State Normalize $w_i^{(j)} \gets \frac{\hat{w}_i^{(j)}}{\sum_{l=1}^N \hat{w}_i^{(l)}}$
+	\State Normalize $w_i^{(n)} \gets \frac{\hat{w}_i^{(n)}}{\sum_{l=1}^N \hat{w}_i^{(l)}}$
 	\State $\hat{N}_{eff} \gets \frac{1}{\sum_{l=1}^N (w_{i}^{(l)})^2}$
 	\If{$\hat{N}_{eff} < N_{th}$}
 		\State Sample $N$ particles with replacement from current particle set $\{\mathcal{P}_j\}_{j=1}^N$ with probabilities $\{\hat{w}_i^{(j)}\}_{j=1}^N.$ Update particle set with the new sampled set
-		\State $w_i^{(j)} \gets \frac{1}{N}$ for $j=1,\hdots , N$
+		\State $w_i^{(n)} \gets \frac{1}{N}$ for $n=1,\hdots , N$
 	\EndIf
 \EndFor
-\State $j^* = \arg \max_{j = 1 , \hdots, N} w_m^{(j)}$
+\State $n^* = \arg \max_{n = 1 , \hdots, N} w_m^{(n)}$
 
-\State Output location estimate $\{\hat{x}_i^{(j^*)}\}_{i=1}^m$ 
-
-\State Output distribution $p(\{\hat{x}^{(j)}\}_{i=1}^m|\{\tilde{R}_i\}_{i=1}^m,\mathcal{C},G) = w_m^{(j)}$ for $j=1$ to $N$
+\State Output location estimate $\{\hat{x}_i^{(n^*)}\}_{i=1}^m$ 
+\State Output distribution \\
+$p(\{\hat{x}^{(n)}\}_{i=1}^m|\{\tilde{R}^{1,2,3,4}_i\}_{i=1}^m,\{\tilde{B}^{1,2,3,4}_i\}_{i=1}^m,\mathcal{C},G) = w_m^{(j)}$ for $n=1$ to $N$
 \end{algorithmic}
 \end{algorithm}  
-
+\section{Machine learning based Channel modeling}
+\label{sec:channel-model}
 \subsection{Regression based Observation Likelihood}
 \label{sec:prob-reg}
-The LUMD records at different states
-(locations) represent the observations of HMM model. The probability
-distribution (also called the likelihood function) of an observation (LUMD record) 
-conditioned on a location is denoted by
-$p(\tilde{R}_i, \tilde{B}^j_i|\hat{x}_{i})$. In our approach, these probabilities
-can be learnt from the drive test data using regression on training (or say drive test) data to
-estimate $p(\tilde{R}_i, \tilde{B}^j_i|\hat{x}_{i})$.
-Our goal is to estimate the probability of a observing an RSRP given a location.  To
-achieve this, we resort to Random Forest based regression~\cite{BreimanRandFor} on
-the drive test data.  The rationale behind choosing Random Forest is as follows:
-first, the drive test data is spread over a non-contiguous location because coverage
-areas in a cell are not necessarily connected.  Secondly, wireless RSRP
-manifests quite different properties in different locations and Random Forest is ideal
-for automatically segmenting an area into locations where the RSRPs
-exhibit strong spatial correlation.
+The SSSRP reported at different states
+(locations) is part of the observations of HMM model. The probability
+distribution (also called the likelihood function) of an observed SSSRP on a location is denoted by
+$p(\tilde{R}_i|\hat{x}_{i})$. In our approach, these probabilities
+can be learnt from the training data using regression on training (or say drive test) data to
+estimate $p(\tilde{R}_i|\hat{x}_{i})$. There are different machine learning regression algorithm in the literature.
+However, SSSPR has the following two special properties:
+\begin{itemize}
+	\item The drive test data is spread over a non-contiguous location because coverage
+	areas in a cell are not necessarily connected.
+	\item  Wireless SSSRP manifests quite different properties in different locations
+\end{itemize}
+
+Thus, we use random forest regressor to segment the area into locations where the SSSPRs
+exhibit strong spatial correlation. 
 
 The regressions steps are as follows:
 
 \begin{enumerate}
-
-\item For each location and each base station that can be heard at that location, we
+\item For each location, each base station and each reported beam indices that can be heard at that location, we
 take the empirical mean and standard deviation of all corresponding drive test data
-RSRP. 
+SSSRP. 
 
-\item For each cell, model the spatial variation of RSRP-statistics (i.e., mean and
+\item For each cell and each beam indices, model the spatial variation of SSSRP-statistics (i.e., mean and
 standard deviation) using {\em Random Forest} where the latitude and the longitude are 
-taken as features of the model and the RSRP-statistic  of the cell is the output. Each such {\em
+taken as features of the model and the SSSRP-statistic  of the cell is the output. Each such {\em
 Random Forest} is trained using data aggregated in previous step. Also,
 compute the mean square error (or {\em cross validation error})
 for each random forest.
 
-\item Denote by $RndFrst_m(x,c)$ ($RndFrst_s(x,c)$) the random forest predictor of
-mean (standard deviation) of RSRP for cell-$c$
-at location $x$. Let $(\sigma_{RF}(c))^2$ be the corresponding
+\item Denote by $RndFrst_m(x,b,c)$ ($RndFrst_s(x,c)$) the random forest predictor of
+mean (standard deviation) of SSSRP for cell-$c$, beam-$b$
+at location $x$. Let $(\sigma_{RF}(b,c))^2$ be the corresponding
 mean square error of the predictor. Then we model
 \begin{align}
 p(\tilde{R}_i|\hat{x}_{i}) =
-\mathcal{N}(RndFrst(\hat{x}_{i},c), \sigma_c^2(\hat{x}_i))\ ,
+\mathcal{N}(RndFrst(\hat{x}_{i},b,c), \sigma_c^2(\hat{x}_i))\ ,
+\label{eqn:rndfrst}
 \end{align}
-where $$\sigma_c^2(x) = RndFrst_s(x,c) + \sigma_{RF}^2(c)\ ,$$ 
+where $$\sigma_c^2(x) = RndFrst_s(x,b,c) + \sigma_{RF}^2(b,c)\,$$ 
 and the serving cell-$c$ can be obtained from the LUMD record. In general, we
 can choose any spatial regressor instead of random forest. However, choosing
 random forest makes the model robust to cell propogation properties and to the
 fact that the coverage area of the cell could be disjoint.
-
 \end{enumerate}
-
-This regression procedure can be repeated for other RF measurements like RSRQ as
-well.
 
 \subsection{Classification based Observation Likelihood}
-\label{sec:prob-reg}
-The LUMD records at different states
-(locations) represent the observations of HMM model. The probability
-distribution (also called the likelihood function) of an observation (LUMD record) 
+\label{sec:prob-classification}
+As part of the observations of HMM model, UE reports up to four observed best beam indices. The probability
+distribution (also called the likelihood function) of a particular observed beam indices as its $j$-th best reported beam indices
 conditioned on a location is denoted by
-$p(\tilde{R}_i, \tilde{B}^j_i|\hat{x}_{i})$. In our approach, these probabilities
-can be learnt from the drive test data using regression on training (or say drive test) data to
-estimate $p(\tilde{R}_i, \tilde{B}^j_i|\hat{x}_{i})$.
-Our goal is to estimate the probability of a observing an RSRP given a location.  To
-achieve this, we resort to Random Forest based regression~\cite{BreimanRandFor} on
-the drive test data.  The rationale behind choosing Random Forest is as follows:
-first, the drive test data is spread over a non-contiguous location because coverage
-areas in a cell are not necessarily connected.  Secondly, wireless RSRP
-manifests quite different properties in different locations and Random Forest is ideal
-for automatically segmenting an area into locations where the RSRPs
-exhibit strong spatial correlation.
+$p(\tilde{B}^j_i|\hat{x}_{i})$. In our approach, these probabilities
+can be learnt from the drive test data using classification on training (or say drive test) data to
+estimate $p(\tilde{B}^j_i|\hat{x}_{i})$.
+There are different machine learning classifier in the literature.
 
-The regressions steps are as follows:
+Thus, we use random forest classifier to segment the area into locations where the coverage of beam indices
+exhibit strong spatial correlation. 
+
+The classification steps are as follows:
 
 \begin{enumerate}
 
-\item For each location and each base station that can be heard at that location, we
-take the empirical mean and standard deviation of all corresponding drive test data
-RSRP. 
+\item For each location, each base station that can be heard at that location, we
+take the corresponding drive test data beam indices. 
 
-\item For each cell, model the spatial variation of RSRP-statistics (i.e., mean and
-standard deviation) using {\em Random Forest} where the latitude and the longitude are 
-taken as features of the model and the RSRP-statistic  of the cell is the output. Each such {\em
-Random Forest} is trained using data aggregated in previous step. Also,
-compute the mean square error (or {\em cross validation error})
-for each random forest.
+\item For each cell, model the likelihood of a certain classification (beam indices) using {\em Random Forest} where the latitude and the longitude are 
+taken as features of the model and the likelihood of the beam indices is the output. Each such {\em
+Random Forest} is trained using data aggregated in previous step.
 
-\item Denote by $RndFrst_m(x,c)$ ($RndFrst_s(x,c)$) the random forest predictor of
-mean (standard deviation) of RSRP for cell-$c$
-at location $x$. Let $(\sigma_{RF}(c))^2$ be the corresponding
-mean square error of the predictor. Then we model
-\begin{align}
-p(\tilde{R}_i|\hat{x}_{i}) =
-\mathcal{N}(RndFrst(\hat{x}_{i},c), \sigma_c^2(\hat{x}_i))\ ,
-\end{align}
-where $$\sigma_c^2(x) = RndFrst_s(x,c) + \sigma_{RF}^2(c)\ ,$$ 
-and the serving cell-$c$ can be obtained from the LUMD record. In general, we
-can choose any spatial regressor instead of random forest. However, choosing
-random forest makes the model robust to cell propogation properties and to the
-fact that the coverage area of the cell could be disjoint.
+\item In this paper, we use the random forest classifier in the machine learning library (sklearn) to predict the probability of 
+reporting a specific beam indices. The function $predict\_proba(X)$ can be used to get the probability of class $X$. 
 
 \end{enumerate}
+\subsection{Inference based Observation Likelihood}
+\label{sec:prob-combined}
+In the above two sections \ref{sec:prob-reg} and \ref{sec:prob-classification}, we have descrbed how to do the inference based on SSSRP and 
+beam indices seperately. In this subsection, we will combine them to construct the combined inference based on the observation.
 
-This regression procedure can be repeated for other RF measurements like RSRQ as
-well.
+\begin{equation} 
+\begin{split}
+	p(\tilde{R}^1_i, \tilde{R}^2_i, \tilde{R}^3_i,\tilde{R}^4_i, \tilde{B}^1_i, \tilde{B}^2_i, \tilde{B}^3_i, \tilde{B}^4_i|\hat{x}_{i})
+	\\
+	=\prod_{j=1}^4 p(\tilde{R}^j_i|\hat{x}_{i}, \tilde{B}^j_i)p(\tilde{B}^j_i|\hat{x}_{i}),
+\end{split}
+\label{eqn:combined}
+\end{equation}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\iffalse
 
 \section{Extension: Joint Localization and Channel Modling}
-Each LUMD record $R_t$ may be viewed as a $K+2$ length vector containing $K$
-RSRP measurements (one for each base station), the measured RSRQ, and the timing
-advance (TA) from the serving base station. However for any particular record
-$R_t$ several of these $K+2$ fields may be missing. The power received (in dBm)
-or RSRP from base station $k$ by an UE at position $x$ be $P_k(x).$ Since the
-transmit power from each base station is known, the variable $P_k(x)$ captures
-the channel from base station $k$ to an UE at position $x.$ \\     
-
-\textbf{Problem:} Let $\mathcal{D}_1=\{X_t,R_t\}_{t=1}^n$ represent the labeled
-drive test dataset. $\mathcal{D}_2 = \{\tilde{R}_i,T_i\}_{i=1}^m$ is the
-unlabeled PCDM data, where $T_i$ is the time when record $\tilde{R}_i$ is sent.
-The problem of joint channel modeling and localization is to use the complete
-data $\mathcal{D}_1,\mathcal{D}_2,$ graph $G$ and base station locations
-$\{y_k\}_{k=1}^K$ to do the following.
-
-\begin{enumerate}
-
-\item Estimate the unknown user locations $\tilde{x}_i$ for $i=1$ to $m.$
-
-\item For every location $x \in V$ estimate the RSRP $P_k(x)$ from each base
-	station $k \in [K]$ to an UE at location $x.$
-
-
-\end{enumerate}  
-
-
-
-
-\subsection{EM Algorithm}
-
 In this section we describe our main algorithm for joint channel modeling and UE
 localization. The Joint Channel Modeling and Localization (JCML) algorithm takes
 as input the labeled and unlabeled datasets $\mathcal{D}_1,\mathcal{D}_2,$ the
@@ -640,76 +609,28 @@ instead of re-estimating all previous locations.
 In this section, we present evaluation of our proposed technique. The objective of
 our evaluation is three folds: to understand the accuracy of our localization scheme, to evaluate
 how much the accuracy depends of fraction of network coverage area that is drive
-tested, and to evaluate the extent to which RSRP-RSSI pair serves as good feature set
-for indoor-outdoor classification.
+tested.
 
 \subsection{Methodology}
-We validate of our solution with measurement data collected from the LTE deployment of a top-3 service
-provider in US in the area of Chelsea in New York City (see map in
-Figure~\ref{fig:toyeg}). In this area, we use the
-drive test data (from outdoor locations) to validate our results; we also make use of
-walk test data from the same location for evaluating indoor-outdoor classification. Note that, the
-drive test data is used for training the Hidden Markov Model in
-Algorithm~\ref{alg:LocalizeUEpf}. In practice, once the HMM is trained, LUMD records
-from UE can be localized using our techniques, however, we will not be able to
-validate the accuracy as we do not have access to ground truths, i.e., actual mobile
-location from which the LUMD records were sent. Thus, to validate our approach, we divided the
-drive test data locations into two sets as follows:
+In this paper, we focus on one isolated cell in 5G network, which is the measurement report
+only has the information of the serving cell. In the field, when we have multiple cells, the additional
+information on the measruement report from neigboring cells can be easily incoorbated into the proposed algorithm and improve the 
+localization accuary. As there is no commercial deployed 5G network yet, we dont have the drive test data from the field.
+Instead, we use our 5G system simulator to generate both training data and test data.
 
-\begin{itemize}
+The 5G system we use in this evaluation is operating at mmwave band, and the cell ISD is 100m. The testing data points are illustrated in 
+Figure ~\ref{fig:training}. Instead of diving the training data into training and validation, we use the gridsearchCV and cross validation functionaility in 
+sklearn ~\cite{sklearn} to avoid the overfitting since we have limited number of training data.
 
-	\item {\em Training locations:} A random chosen subset of drive test data
-		locations were chosen as {\em training locations} and all drive test data
-		from these training locations were chosen to train our HMM
-		probabilities. 
+\begin{figure}[t]
+	\begin{center}
+	\includegraphics[height=2.4in,width=3.2in]{./GM_training.png}
+	\caption{\label{fig:training}
+	{\small Training data points}}
+	\end{center}
+	\end{figure}		
 
-	\item {\em Test locations:} The drive test data locations that were not part
-		of training locations were chosen as {\em test locations}. In addition, we
-		also allow for some randomly selected locations (a small fraction) to be part of test
-		locations. 
-\end{itemize}
-		
-		
-{\bf Synthesizing test LUMD records:} The drive test data at test locations
-include much more information than LUMD record that would be generated at those
-locations. To exactly mimic LUMD record that would be generated at the test
-locations, we perform the following steps for each test location to synthesize LUMD
-record (we only synthesize the contents relevant for our purpose): 
-
-\begin{enumerate}
-	
-\item Find the serving cell in the drive test data and include the RSRP
-and RSRQ of the serving cell in and RSRQ.
-
-\item  Verify if the strongest RSRP of any non-serving cell satisfies A3 or A4 event
-condition (see Section~\ref{sec:bg}) and if so, include the RSRP and RSRQ of
-that neighbor cell in the LUMD record. Note that, we strip of any location
-information from the LUMD record, however we separately maintain it simply to
-compare with estimated location from the thus created LUMD data. 
-
-\end{enumerate}
-
-Once LUMD records are generated at each location, we synthesize LUMD records for a
-moving user using the following steps: {\em (i)} start at a random location in the
-street map, select LUMD record at this location based on LUMDs created at this
-location, {\em (ii)} a new next location of user is generated by sampling the nearby
-test locations probabilistically where the probabilities are that of user moving to
-the new location based on velocity distribution given by~(\ref{eqn:tranVel}) and a fixed
-travel time of 10s, {\em (iii)}  generate an LUMD record at this new location based
-on the LUMD records generated at each location, {\em (iv)} repeat previous three
-steps till no new location can be found in map (due to absence of nearby test
-location) or number of LUMD records reaches a threshold (chosen as~6 since we have
-rarely observed more than $6\--8$ LUMD records from one user during a session in real
-LUMD data).
-
-{\bf Size of data set:} Our data set consisted of around $129000$ drive test data
-points at $19000$ distinct locations. We present results with two different splits
-between training and test locations: one with percentage of locations unique to
-training locations, unique to test locations, common to both respectively  $50\%,
-40\%, 10\%$, and another with the corresponding fractions $70\%,20\%,10\%$. All our
-results are averages over more than 100 user generated LUMD sequences.
-
-\subsection{LUMD Localization Results}
+\subsection{Localization Results}
 
 
 \begin{figure}[t]
@@ -721,83 +642,66 @@ results are averages over more than 100 user generated LUMD sequences.
 \end{figure}
 
 
-In Figure~\ref{fig:toyeg}, we show the predicted and actual locations of all mobiles
-for which we generated LUMD records. As it can be seen, the actual locations
+In Figure ~\ref{fig:toyeg}, we show the predicted and actual locations of all mobiles. As it can be seen, the actual locations
 and the estimated locations are quite close. In the following, we present more
 detailed analysis of the results.
 
 \begin{figure}[t]
-\begin{center}
-\subfigure[]{
-\includegraphics[height=2.5in, width=3.3in]{./accuracy-cdf-6010.png}
-\label{fig:cdf1}}
-\subfigure[]{
-\includegraphics[height=2.5in, width=3.3in]{./accuracy-cdf-8030.png}
-\label{fig:cdf2}}
-\caption{CDF of accuracy.\label{fig:leapperf} when training locations, test
-locations, common locations are respectively $0.5,0.4,0.1$ and $0.7,0.2,0.1$.}
-\end{center}
-\end{figure}
-
-{\em Accuracy CDF:} In Figure~\ref{fig:cdf1} and Figure~\ref{fig:cdf2}, we show the
-accuracy distribution for two different cases of fraction of locations used for
-training. When the training locations are $50\%$ of locations, the median accuracy is around
-$25m$ and when the training locations are $70\%$ of locations, the median accuracy is
-around $20m$. At a higher percentile, the accuracy is around $50m$ with $70\%$
-training locations and around $75m$ for $50\%$ training locations. This implies that,
-when smaller fraction of network coverage area is drive tested, the median accuracy
-does not get affected much but the probability of large inaccuracy increases.
-However, a median accuracy is the range of $20m\--30m$ range is significant
-improvement over previous non-machine learning based techniques in literature that
-reported median accuracies of more than $100m$~\cite{Flananghan07PCMD}.
-
+	\begin{center}
+	\subfigure[]{
+	\includegraphics[height=2.5in, width=3.3in]{./Beam_map_LoS.png}
+	%\caption{True Beam map for LoS}
+	\label{fig:beam_map_cdf1}}
+	\subfigure[]{
+	\includegraphics[height=2.5in, width=3.3in]{./Beam_map_MixedLoSNLoS.png}
+	 %\caption{True Beam map for mixed LoS & NLoS}
+	\label{fig:beam_map_cdf2}}
+	\subfigure[]{
+		\includegraphics[height=2.5in, width=3.3in]{./Prediction_Beam_LoS.png}
+	%	\caption{Predicted Beam map for LoS}
+		\label{fig:beam_map_cdf3}}
+		\subfigure[]{
+	\includegraphics[height=2.5in, width=3.3in]{./Prediction_Beam_MixedLoSNLoS.png}
+	%\caption{Predicted Beam map for NLoS}
+	\label{fig:beam_map_cdf4}}
+	\caption{Reported best beam indices distribution map \label{fig:leapperf} with different RF channel condition (LoS vs. MixedLoS&NLoS)}
+	\end{center}
+	\end{figure}
 
 \begin{figure}[t]
 \begin{center}
 \subfigure[]{
-\includegraphics[height=2.5in, width=3.3in]{./accuracy-length-6010-mod.png}
-\label{fig:box1}}
+\includegraphics[height=2.5in, width=3.3in]{./Accuracy_cdf_LoS.png}
+\label{fig:cdf1}}
 \subfigure[]{
-\includegraphics[height=2.5in, width=3.3in]{./accuracy-length-8030-mod.png}
-\label{fig:box2}}
-\caption{LUMD length v/s accuracy
-when training locations, test
-locations, common locations are respectively $0.5,0.4,0.1$ and $0.7,0.2,0.1$.}
+\includegraphics[height=2.5in, width=3.3in]{./Accuracy_cdf_MixedLoS_NLoS.png}
+\label{fig:cdf2}}
+\caption{CDF of accuracy.\label{fig:leapperf} with different RF channel condition (LoS vs. MixedLoS&NLoS)}
 \end{center}
 \end{figure}
+{\em Inference accuarcy} 
+Figure~\ref{fig:beam_map_cdf1} and Figure~\ref{fig:beam_map_cdf2} illustrate the beam indices at different locations when RF channel conditons are LoS and mixed LoS&NLoS, respectively. Figure~\ref{fig:beam_map_cdf3} and Figure~\ref{fig:beam_map_cdf4}
+shows the predicted beam indices using random forest classification. As we can see from these figures, when the training data is more spreaded as shown in Figure ~\ref{fig:beam_map_cdf2},
+the random forest classifier will divided the whole area into smaller region. The accuracy sore for LoS is 0.78 and for mixed LoS&NLoS case is 0.57.
+
+{\em Accuracy CDF:} In Figure~\ref{fig:cdf1} and Figure~\ref{fig:cdf2}, we show the
+accuracy distribution under two different type of RF channel condition, line of sight (LoS) vs. Mixed LoS & NLoS. The RF channel scenarios are illustrated in
+~\cite{3gpp38901}. With LoS channel, the median accuracy is around
+$4m$ and with Mixed LoS and NLoS channel, the median accuracy is around $12m$.These results have not included additional constraints such as that users move on prescribed paths such was walkways etc. as well as additional columns in the data matrix such as TA, etc. 
+With the additional information, the localization accuracy is expected to improve further.
 
 
-{\em Accuracy vs. length of LUMD sequences:} Another relevant question is whether the
-performance of scheme depends critically on length of LUMD sequences because our
-technique relies on stitching together multiple LUMD records from the same user. In
-Figure~\ref{fig:box1} and Figure~\ref{fig:box2}, we show the accuracies in the form a
-box plots. For different LUMD sequences, we show boxes that represent IQR or inter 
-quantile range ($25\--75$-th percentile) and the middle line in each box represents the median.
-As it can be seen that the median accuracy of our scheme does not change much with
-length of LUMD sequences. For example, the median accuracy with $70\%$ locations with
-training data, has all median accuracies within $30m$ for any LUMD sequence of length
-less than~6.
-
-\begin{remark} An important question is related to whether a median accuracy of 20m
-is good enough. One measure of this to identify the extent to which the location
-uncertainty area is reduced. To illustrate this, since measurement records contain
-serving cell information and typical serving cell radius is around 500m in LTE in
-urban areas, a rough figure of initial location uncertainty area is $\pi\times
-500^2$. With a median error of $20m$, the location uncertainty area is reduced to a factor 
-of $20^2/500^2 \approx 0.16\%$. For indoor localization, if a Wi-Fi coverage area is taken as 
-$200m$, a similar reduction would require the localization error to be around $3.2m$.
-\end{remark}
 
 \section{Concluding Remarks}
 \label{sec:concl}
 
-In this paper, we have developed localization algorithms of measurement records in
-LTE networks and we have also shown that measurement records can classified as indoor
-or outdoor with appropriate training. We have shown median accuracy of 20m in urban
-settings which is a significant improvement over more than 100m accuracy reported
-with non machine learning based techniques. A more challenging problem is to identify
-indoor locations at least in terms of buildings. This could require more training or
-combining LUMD with Wi-Fi signatures available from mobiles.
+% In this paper, we have developed localization algorithms of measurement records in
+% LTE networks and we have also shown that measurement records can classified as indoor
+% or outdoor with appropriate training. We have shown median accuracy of 20m in urban
+% settings which is a significant improvement over more than 100m accuracy reported
+% with non machine learning based techniques. A more challenging problem is to identify
+% indoor locations at least in terms of buildings. This could require more training or
+% combining LUMD with Wi-Fi signatures available from mobiles.
 
 
 
