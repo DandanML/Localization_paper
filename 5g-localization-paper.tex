@@ -90,7 +90,7 @@
 
 - Algorithm
 
-- Extension to channel modeling
+- Extension to observation modeling
 
 - Results
 
@@ -195,7 +195,7 @@ The rest of the paper is organized as follows. Section~\ref{sec:bg} provides som
 background and introduces relevant terminologies. Section~\ref{sec:ps} presents
 the problem setting and states the precise localization problem.
 Section~\ref{sec:localalgo}
-presents the main localization algorithm and Section~\ref{sec:extensionalgo} describes the extension of the joint localizationa and channel model estimation algorithm. 
+presents the main localization algorithm and Section~\ref{sec:extensionalgo} describes the extension of the joint localizationa and observation model estimation algorithm. 
 We present experimental validation in Section~\ref{sec:eval} and finally we conclude in
 Section~\ref{sec:concl}.
 
@@ -323,11 +323,9 @@ Thus the problem can be stated as follows:
 
  {\bf Problem of localization in 5G network}: We are given training data consisting
 of locations $\{x_i\}_{i=1}^n$ and associated SSSRPs  $\{R^j_{i,k}\}_{i=1}^n$ and beam indices $\{B^j_{i,k}\}_{i=1}^n$of
-cell-$i$ at location $x_i$. Estimate the unknown location of a sequence of measurements
-${\tilde{R}}^j_k(t_i)$ and ${\tilde{B}}^j_k(t_i)$ where $i=1,2,\hdots,m,\ k\in K(t_i), j=1, 2, 3, 4$. Assume that the locations
-are drawn from locations in a road network given by $G_r=(V,E)$. Note that SSSRP and beam indices are the new metric reported
-in 5G network.
-
+cell-$k$ at location $x_i$. Assume that the locations
+are drawn from locations in a road network given by $G_r=(V,E)$. Estimate the unknown location of a sequence of measurements
+${\tilde{R}}^j_k(t_i)$ and ${\tilde{B}}^j_k(t_i)$ where $i=1,2,\hdots,m,\ k\in K(t_i), j=1, 2, 3, 4$. 
 Note that, in the algorithm illustration in this paper, we only focus on SSSRP and beam indices. However, in the field, there may be other measurement reports that 
 can be used to help to improve the localization accuary. For example, timing alignment, etc. These addtional measurement reports can be easily incoorbated into our proposed algorithm.
 
@@ -342,27 +340,21 @@ The goal is to infer the hidden state from the observations based on
 prior knowledge about the transition probabilities between hidden states and
 observations in the states.
 
-In this paper, we use particle filter to solve the localization problem presented in HMM. In this approach, the following two probablistic models are needed:
+In this paper, we use the particle filter to solve the localization problem. The new algorithm $5GLocalizeAlgo$ is stated as follows:
 \begin{itemize}
-	\item state transition model: this desribes how the hidden state moves from one state to another state as illustrated in section ~\ref{sec:statemodel}.
-	\item channel model: this describes the probability of observing the %given measurement report at a specific location as illustrated in section ~\ref{sec:channel-model}.
+	\item We first initialize a set of $N$ particles based on some priori distribution, for example, the coverage map of a base station.
+	Here, particles are the samples of the possibles hidden states. 
+	\item Each particle has its corresponding weights or likelihoods. We use machine learing algorithms to infer the weights/likelihood as illustrated in Section ~\ref{sec:channel-model}.
+	\item Particles move from one state to another state based 
+	on the state transition model given in section ~\ref{sec:statemodel}.
+	\item The pseudocode is presented in Algorithm \ref{alg:LocalizeUEpf}.
 \end{itemize}
- In the proposed algorithm $5GLocalizeAlgo$ we maintain set
-
- of $N$ particles and their corresponding weights or likelihoods where each
- particle represents a sequence of possible location of the UE. Recall that $t_i$
- denotes the time at which the UE sends the LUMD record $\tilde{R}^j_i$ and $v_i$ is
- the speed of the UE at time $t_i.$ Let $d_G(x,y)$ be the shortest distance
- between points $x,y \in V$ calculated along the edges of the graph $G.$ The
- pseudocode is presented in Algorithm \ref{alg:LocalizeUEpf}. $N_{th}$ is a
- non-degeneracy parameter input which determines when less probable particles are
- to be discarded. 
 
 \begin{figure}[t]
 	\begin{center}
 	\includegraphics[height=3.5in,width=3.2in]{./HMM_ParticleFilter_Illustration.png}
 	\caption{\label{fig:hmm_particle}
-	{\small LUMD Data Collection.}}
+	{\small Hidden Markov Model and Particle filter}}
 	\end{center}
 	\end{figure}
 
@@ -391,37 +383,37 @@ d_t = \alpha d_{t-1}+(1-\alpha)\bar{d}+\sqrt{(1-\alpha^2)}d_{x_{t-1}}
 Specifically, at time interval t, a mobile's position is given by the equations.
 
 \begin{align}
-	x_t = x_{t-1} +S_{t-1}cos(d_{t-1})
+	x_t = x_{t-1} +S_{t-1}cos(d_{t-1})*\Delta t
 \label{eqn:mobilitymodelx}
 \end{align}
 \begin{align}
-y_t = y_{t-1} +S_{t-1}sin(d_{t-1})
+y_t = y_{t-1} +S_{t-1}sin(d_{t-1})*\Delta t
 \label{eqn:mobilitymodely}
 \end{align}
 
 where ($x_t$,$y_t$) and ($x_{t-1}$,$y_{t-1}$) are the x and y coordinates of the mobile’s position 
-at the $t$th and ($t-1$) st time intervals, respectively.
+at the $t$th and ($t-1$) st time intervals, respectively. $\Delta t$ is the duration of the time interval.
 
 \begin{algorithm}
-\caption{$LocalizeUEpf(\mathcal{D}_{tr},\mathcal{C},G,N_{th})$}
+\caption{$5GLocalizeAlgo(\mathcal{D}_{tr},G,N_{th})$}
 \label{alg:LocalizeUEpf}
 \begin{algorithmic}[1]
-\State Offline inference based on training data. This does not need real time processing.
+\State Offline inference based on training data $\mathcal{D}_{tr}$. This does not need real time processing.
 \State Sample $N$ particles $\mathcal{P}_j = \{\hat{x}_1^{(j)},\hat{v}_1^{(j)}\},$ $j=1,\hdots , N$ 
 from prior distribution $p(\tilde{x}_1, \tilde{v}_1|G)$ 
 
-\State Initialize importance weights $\hat{w}_1^{(n)} \gets p(\tilde{R}^1_1,\tilde{R}^2_1,\tilde{R}^3_1,\tilde{R}^4_1, \tilde{B}^1_1, \tilde{B}^2_1, \tilde{B}^3_1, \tilde{B}^4_1|\hat{x}_1^{(n)}, \mathcal{C}),$ $n=1,\hdots , N$
+\State Initialize importance weights $\hat{w}_1^{(n)} \gets p(\{\tilde{R}^j_1\}_{j=1}^4,\{\tilde{B}^j_1\}_{j=1}^4|\hat{x}_1^{(n)}),$ $n=1,\hdots , N$
 
 \State Normalize $w_1^{(n)} \gets \hat{w}_1^{(n)}/\sum_{l=1}^N \hat{w}_1^{(l)},$ $n=1,\hdots , N$
 
 \For{$i = 2$ to $m$}
 	\For{$n=1$ to $N$}
-		\State Sample $\hat{x}_i^{(n)}$ based on Gauss-Markov model in ~(\ref{eqn:mobilitymodelx}) and ~(\ref{eqn:mobilitymodely}).
-		\State Update weight $\hat{w}_i^{(n)} \gets \hat{w}_{i-1}^{(n)} \times p(\tilde{R}^1_i, \tilde{R}^2_i,\tilde{R}^3_i,\tilde{R}^4_i, \tilde{B}^1_i, \tilde{B}^2_i, \tilde{B}^3_i, \tilde{B}^4_i|\hat{x}_{i}^{(n)},\mathcal{C})$ 
+		\State Sample $\hat{x}_i^{(n)}$ from $\hat{x}_{i-1}^{(n)}$ based on state transition model in section ~\ref{sec:statemodel}.
+		\State Update weight $\hat{w}_i^{(n)} \gets \hat{w}_{i-1}^{(n)} \times p(\{\tilde{R}^j_i\}_{j=1}^4, \{\tilde{B}^j_i\}_{j=1}^4|\hat{x}_{i}^{(n)})$ 
 	\EndFor
 	\State Normalize $w_i^{(n)} \gets \frac{\hat{w}_i^{(n)}}{\sum_{l=1}^N \hat{w}_i^{(l)}}$
 	\State $\hat{N}_{eff} \gets \frac{1}{\sum_{l=1}^N (w_{i}^{(l)})^2}$
-	\If{$\hat{N}_{eff} < N_{th}$}
+	\If{$\hat{N}_{eff} < N_{th}$, $i<m$, resampling condition satisfied}
 		\State Sample $N$ particles with replacement from current particle set $\{\mathcal{P}_j\}_{j=1}^N$ with probabilities $\{\hat{w}_i^{(j)}\}_{j=1}^N.$ Update particle set with the new sampled set
 		\State $w_i^{(n)} \gets \frac{1}{N}$ for $n=1,\hdots , N$
 	\EndIf
@@ -430,19 +422,46 @@ from prior distribution $p(\tilde{x}_1, \tilde{v}_1|G)$
 
 \State Output location estimate $\{\hat{x}_i^{(n^*)}\}_{i=1}^m$ 
 \State Output distribution \\
-$p(\{\hat{x}^{(n)}\}_{i=1}^m|\{\tilde{R}^{1,2,3,4}_i\}_{i=1}^m,\{\tilde{B}^{1,2,3,4}_i\}_{i=1}^m,\mathcal{C},G) = w_m^{(j)}$ for $n=1$ to $N$
+$p(\{\hat{x}^{(n)}\}_{i=1}^m|\{\tilde{R}^{1,2,3,4}_i\}_{i=1}^m,\{\tilde{B}^{1,2,3,4}_i\}_{i=1}^m,G) = w_m^{(j)}$ for $n=1$ to $N$
 \end{algorithmic}
 \end{algorithm}  
-\section{Machine learning based Channel modeling}
+\section{Observation modeling using machine learning}
 \label{sec:channel-model}
-\subsection{Regression based Observation Likelihood}
+As mentioned in the above section, one of the important inference of HMM is the likelihood of observation metric at given state. In this section, we discuss how to infer the likehihood based 
+on the observation metrics, i.e., SSSRP and beam indices in 5G network. 
+\subsection{Inference on likelihood of beam indices}
+\label{sec:prob-classification}
+As part of the observations of HMM model, UE reports up to four observed best beam indices. The probability
+distribution (also called the likelihood function) of a particular observed beam indices as its $j$-th ($j=1, 2, 3, 4$) best reported beam indices
+at a given location is denoted by
+$p(\tilde{B}^j_i|\hat{x}_{i})$. In our approach, these probabilities
+can be learnt from the drive test data using machine learning classification algorithms.
+There are different machine learning classifier in the literature. We use random forest classifier to segment the area into locations where the coverage of beam indices
+exhibit strong spatial correlation. Note that during the study, we have tried different classifier and random forest indeed presents the best results.
+
+The classification steps are as follows:
+
+\begin{enumerate}
+
+\item For each location, each base station that can be heard at that location, we
+take the corresponding drive test data beam indices. 
+
+\item For each cell, model the likelihood of a certain classification (beam indices) using {\em Random Forest} where the latitude and the longitude are 
+taken as features of the model and the likelihood of the beam indices is the output. Each such {\em
+Random Forest} is trained using data aggregated in previous step.
+
+\item In this paper, we use the random forest classifier in the machine learning library (sklearn) to predict the probability of 
+reporting a specific beam indices. The function $predict\_proba(X)$ can be used to get the probability of class $X$. 
+
+\end{enumerate}
+\subsection{Inference on likelihood of SSSRP}
 \label{sec:prob-reg}
 The SSSRP reported at different states
-(locations) is part of the observations of HMM model. The probability
+is part of the observations of HMM model. The probability
 distribution (also called the likelihood function) of an observed SSSRP on a location is denoted by
 $p(\tilde{R}_i|\hat{x}_{i})$. In our approach, these probabilities
-can be learnt from the training data using regression on training (or say drive test) data to
-estimate $p(\tilde{R}_i|\hat{x}_{i})$. There are different machine learning regression algorithm in the literature.
+can be learnt from the training data using machine learning regression algorithms. 
+There are different machine learning regression algorithm in the literature.
 However, SSSPR has the following two special properties:
 \begin{itemize}
 	\item The drive test data is spread over a non-contiguous location because coverage
@@ -465,14 +484,14 @@ standard deviation) using {\em Random Forest} where the latitude and the longitu
 taken as features of the model and the SSSRP-statistic  of the cell is the output. Each such {\em
 Random Forest} is trained using data aggregated in previous step. Also,
 compute the mean square error (or {\em cross validation error})
-for each random forest.
+for each random forest. 
 
 \item Denote by $RndFrst_m(x,b,c)$ ($RndFrst_s(x,c)$) the random forest predictor of
 mean (standard deviation) of SSSRP for cell-$c$, beam-$b$
 at location $x$. Let $(\sigma_{RF}(b,c))^2$ be the corresponding
 mean square error of the predictor. Then we model
 \begin{align}
-p(\tilde{R}_i|\hat{x}_{i}) =
+p(\tilde{R}^j_i|\hat{x}_{i}, \tilde{B}^j_i) =
 \mathcal{N}(RndFrst(\hat{x}_{i},b,c), \sigma_c^2(\hat{x}_i))\ ,
 \label{eqn:rndfrst}
 \end{align}
@@ -483,38 +502,13 @@ random forest makes the model robust to cell propogation properties and to the
 fact that the coverage area of the cell could be disjoint.
 \end{enumerate}
 
-\subsection{Classification based Observation Likelihood}
-\label{sec:prob-classification}
-As part of the observations of HMM model, UE reports up to four observed best beam indices. The probability
-distribution (also called the likelihood function) of a particular observed beam indices as its $j$-th best reported beam indices
-conditioned on a location is denoted by
-$p(\tilde{B}^j_i|\hat{x}_{i})$. In our approach, these probabilities
-can be learnt from the drive test data using classification on training (or say drive test) data to
-estimate $p(\tilde{B}^j_i|\hat{x}_{i})$.
-There are different machine learning classifier in the literature.
+Note that in LTE network, the regression algorithm is implemented per cell. However, in 5G, with the existence of
+beam indices, the regression algorithn is now implemented per cell and per beam indices.
 
-Thus, we use random forest classifier to segment the area into locations where the coverage of beam indices
-exhibit strong spatial correlation. 
 
-The classification steps are as follows:
-
-\begin{enumerate}
-
-\item For each location, each base station that can be heard at that location, we
-take the corresponding drive test data beam indices. 
-
-\item For each cell, model the likelihood of a certain classification (beam indices) using {\em Random Forest} where the latitude and the longitude are 
-taken as features of the model and the likelihood of the beam indices is the output. Each such {\em
-Random Forest} is trained using data aggregated in previous step.
-
-\item In this paper, we use the random forest classifier in the machine learning library (sklearn) to predict the probability of 
-reporting a specific beam indices. The function $predict\_proba(X)$ can be used to get the probability of class $X$. 
-
-\end{enumerate}
-\subsection{Inference based Observation Likelihood}
+\subsection{Inference on the likelihood of combined observations}
 \label{sec:prob-combined}
-In the above two sections \ref{sec:prob-reg} and \ref{sec:prob-classification}, we have descrbed how to do the inference based on SSSRP and 
-beam indices seperately. In this subsection, we will combine them to construct the combined inference based on the observation.
+The likelihood of seeing all the observations, $\{\tilde{R^j_i}\}_{j=1}^4$ and $\{\tilde{B^j_i}\}_{j=1}^4$ at a given location $\hat{x}){i}$ is as follows:
 
 \begin{equation} 
 \begin{split}
@@ -530,14 +524,14 @@ beam indices seperately. In this subsection, we will combine them to construct t
 
 \section{Extension: Joint Localization and Channel Modling}
 \label{sec:extensionalgo}
-In this section we describe our main algorithm for joint channel modeling and UE
-localization. The Joint Channel Modeling and Localization (JCML) algorithm takes
+In this section we describe our main algorithm for joint observation modeling and UE
+localization. The Joint Observation Modeling and Localization (JOML) algorithm takes
 as input the labeled and unlabeled datasets $\mathcal{D}_1,\mathcal{D}_2,$ the
 graph $G$ and a parameter $N_{em}$ specifying the number of
 expectation-maximization (EM) iterations to be performed. It outputs the UE
-location estimates $\{\hat{x}_i\}_{i=1}^m$ and the channel model $\mathcal{C}$
+location estimates $\{\hat{x}_i\}_{i=1}^m$ and the observation model $\mathcal{C}$
 in the region of interest. The main idea is to use expectation-maximization
-procedure to iteratively improve the estimates of both the channel model
+procedure to iteratively improve the estimates of both the observation model
 $\mathcal{C}$ and the location estimates $\{\hat{x}_i\}_{i=1}^m.$ The basic EM
 algorithm improves the channel in each iteration from the previous according to
 the following equation.
@@ -564,38 +558,35 @@ The high level pseudo-code of the algorithm is shown in Algorithm \ref{alg:joint
 %\end{algorithm}  
 
 \begin{algorithm}
-\caption{$JCML(\mathcal{D}_1, \mathcal{D}_2, G, N_{em})$}
+\caption{$JOML(\mathcal{D}_1, \mathcal{D}_2, G, N_{em})$}
 \label{alg:joint_ch_model_loc}
 \begin{algorithmic}[1]
-\State $\mathcal{C} \gets ChannelModel(\mathcal{D}_1)$
+\State $\mathcal{C} \gets Observation Model(\mathcal{D}_1)$ based on section ~\ref{sec:channel-model}.
 \For{$j = 1$ to $N_{em}$}
-	\State $\{\hat{x}_i\}_{i=1}^m, p(\{\hat{x}_i,\tilde{R}_i\}_{i=1}^m,|\mathcal{C},G) \gets LocalizeUE(\mathcal{D}_2,\mathcal{C},G)$ \label{step:localize}
+	\State $\{\hat{x}_i\}_{i=1}^m, p(\{\hat{x}_i,\tilde{R}^j_i,\tilde{B}^j_i\}_{i=1}^m|\mathcal{C},G) \gets 5GLocalizeUE(\mathcal{D}_2,\mathcal{C},G)$ as in Algorithm \ref{alg:LocalizeUEpf}. \label{step:localize}
 	\State $\mathcal{D} \gets \mathcal{D}_1 \cup \{\tilde{R}_i,\hat{x}_i\}_{i=1}^m$ \label{line:em_approx}
-	\State $\mathcal{C} \gets ChannelModel(\mathcal{D})$
+	\State $\mathcal{C} \gets Observation Model(\mathcal{D})$ based on section ~\ref{sec:channel-model}.
 \EndFor
-\State Output $\{\hat{x}_i\}_{i=1}^m = \arg \max_{\{\hat{x}_i\}_{i=1}^m} p(\{\hat{x}_i,\tilde{R}_i\}_{i=1}^m,|\mathcal{C},G)$
+\State Output $\{\hat{x}_i\}_{i=1}^m = \arg \max_{\{\hat{x}_i\}_{i=1}^m} p(\{\hat{x}_i,\tilde{R}_i, \tilde{R}_i\}_{i=1}^m,|\mathcal{C},G)$
 \State Output $\mathcal{C}$
 \end{algorithmic}
 \end{algorithm}  
 
 Note that in line \ref{line:em_approx} $\{\hat{x}_i\}_{i=1}^m$ can be the mode
 or samples from the distribution
-$p(\{\hat{x}_i,\tilde{R}_i\}_{i=1}^m,|\mathcal{C},G)$ as a stochastic
-approximation for the EM algorithm. The JCML algorithm uses two main
-subroutines. The first subroutine $ChannelModel$ computes the channel function
+$p(\{\hat{x}_i,\tilde{R}^j_i, \tilde{B}^j_i\}_{i=1}^m,|\mathcal{C},G)$ as a stochastic
+approximation for the EM algorithm. The JOML algorithm uses two main
+subroutines. The first subroutine $ObservationModel$ computes the likelihood function
 $\mathcal{C}$ from the labeled dataset $\mathcal{D}.$ $\mathcal{C}$ can be
-viewed as a function which can output the distribution of RSRP from any base
-station $k$ to any UE location $x \in V.$ The second subroutine $LocalizeUE$
-use the channel model function $\mathcal{C},$ the LUMD data
+viewed as a function which can output the distribution of SSSRP and beam indices from any base
+station $k$ to any UE location $x \in V.$ The second subroutine $5GLocalizeUE$
+use the observation model function $\mathcal{C},$ the LUMD data
 $\{\tilde{R}_i,T_i\}$ and the graph $G$ to come up with location estimates of
-the UE $\{\hat{x}_i\}_{i=1}^m$ and its corresponding distribution. Each time a
+the UE $\{\hat{x}_i\}_{i=1}^m$ and its corresponding distribution as illustrated in section ~\ref{sec:localalgo}. Each time a
 location estimate is computed it is used with the corresponding record
-$\tilde{R}_i$ and the dataset $\mathcal{D}_1$ to further improve the channel
+$\tilde{R}^j_i$, $\tilde{B}^j_i$ and the dataset $\mathcal{D}_1$ to further improve the channel
 model using an expectation-maximization procedure. Therefore in the next
-iteration we can obtain a better location estimate. We now describe each
-subroutine. %Note that in order to make the algorithm more scalable, in line
-\ref{step:localize}, we can just estimate the current location $\hat{x}_i$
-instead of re-estimating all previous locations.
+iteration we can obtain a better location estimate. 
 
 %\fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
