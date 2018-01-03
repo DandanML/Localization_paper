@@ -1,0 +1,26 @@
+\begin{thebibliography}{1}
+
+\bibitem{sklearn}
+{\em http://scikit-learn.org/}.
+
+\bibitem{3gpp38901}
+{\em http://www.3gpp.org/ftp//Specs/archive/38_series/38.901/38901-e20.zip}.
+
+\bibitem{Camp2002}
+{\sc Camp, T., Boleng, J., and Davies, V.}
+\newblock {A survey of mobility models for ad hoc network research}.
+\newblock {\em Wireless Communications and Mobile Computing, Special Issue:
+  Mobile Ad Hoc Networking – Research, Trends and Applications 2}, 5 (2002),
+  439–--547.
+
+\bibitem{Pantelis2016Localization}
+{\sc Ray, A., Deb, S., and Mnogioudis, P.}
+\newblock Localization of lte measurement records with missing information.
+\newblock In {\em IEEE INFOCOM 2016\/} (2016), pp.~1--9.
+
+\bibitem{ltebook}
+{\sc Sesia, S., Toufik, I., and Baker, M.}
+\newblock {\em {LTE, The UMTS Long Term Evolution: From Theory to Practice}}.
+\newblock Wiley, 2009.
+
+\end{thebibliography}
