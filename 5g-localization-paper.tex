@@ -143,23 +143,24 @@
 
 %Importance of measurements
 
-Fuled with the emerging cloud technologies (cloud computing, cloud storage, etc), software defined network (SDN) together with 
+Fueled with the emerging cloud technologies (cloud computing, cloud storage, etc), software defined network (SDN) together with 
 network functions virtualization (NFV) is transforming the techonology, and business models in telcommunication industry.
 Several open source platforms (ONAP, XRAN, etc) have emerged to provide a platform to collect data and share technogies among different 
 vendors and operators. As the wireless network is now evolving into 5G, tremendous data will be shared in these open source platform and thus create 
-a lot of opportunity to provide better service using these data. These data can include a wide variety of measurements, such as the service throughput of the mobile 
+a lot of opportunity to provide better service using these data. The shared data can include a wide variety of measurements, such as the service throughput of the mobile 
 device, the serving cell, the signal strength, etc. In ~\cite{Pantelis2016Localization}, a novel localization algorithm has been proposed to estimate 
 the location when measurement reports are made in LTE systems. The paper shows that the medium accuracy of 20m can be achieved for outdoor mobibles. 
-When celluar network evloves from 4G LTE to 5G, a lot of changes have been made to support lower latency and higher throughput. The most profound advanced technology adopted in 5G
-network is the utilization of the massive multiple input multiple output (MIMO) antennas. With the usage of massive MIMO, the mobile will report beam related metric to the base station. 
+When celluar network evloves from 4G LTE to 5G, a lot of changes have been made to support lower latency and higher throughput. While multiple input multiple output (MIMO) has been extensively used in LTE, the most profound advancement of technology adopted in 5G
+network is the utilization of a high number of (massive) MIMO antennas especially in the high band. With the use of massive MIMO, transmit power can be effectively beamformed and the mobile will report beam related metric to the base station. 
 In this paper, we propose a new localization algorithm to estiamte the location of the measruement report utilizing the new reported metric introduced in 5G network.
  
+\textbf{[QUESTION: Does localization in 5G provide improved accuracy compared to localization in LTE. Do we need to say something about this?]}
 
 %Our goal - loc and class
-As the open source platform is a new platform under development, it provivdes an opportunity to request different measurement 
-metric. 
+As the open source platformsi (such as ONAP, XRAN, etc) are still being developed,  it provides an opportunity to request different measurement 
+metrics. 
 The goal of this work is two folds: 1). identify the measuremnets unique to 5G network for localization.
-2). to estimate the latitude-longitude of the mobile when the measurement record was
+2). estimate the latitude-longitude of the mobile when the measurement record was
 generated for 5G network. 
 %Our approach
 
@@ -170,17 +171,16 @@ At a high level, our approach has two steps for
 localizing measurement records from outdoor mobiles:
 
 \begin{enumerate}
-\item Instead of viewing each LUMD record in isolation, for each mobile, we {\em stitch}
-together LUMD records from that mobile over a ``session
+    \item Instead of viewing each NR UE measurement data (NUMD) record in isolation, for each mobile, we {\em stitch}
+together NUMD records from that mobile over a ``session
 duration"  and model it as a suitable Markovian time series. The problem now
 reduces to identifying locations (states) of the entire path of
 the mobile.
 
 \item The above solution method assumes that the probabilities characterizing the
-underlying Markovian structure can be learned. This is done by performing supervised learning using the unique property of 5G networks.
+    underlying Markovian structure can be learned. This is done by performing supervised learning using the unique property \textbf{[QUESTION: what is this unique property? beamforming?]} of 5G networks.
 The training data for supervised learning may come from
-drive test carried out by network providers once 5G is deployed commein the field. However, given 5G network is not available in the field now, 
-in this paper, we generate the drive training data and testing data from a 5G simulator.
+drive test carried out by network providers once 5G is deployed commein the field. However, given that 5G network deployment is not available in the field during this study, we generate the drive training data and testing data from a 5G simulator.
 	
 \end{enumerate}
 
@@ -195,7 +195,7 @@ The rest of the paper is organized as follows. Section~\ref{sec:bg} provides som
 background and introduces relevant terminologies. Section~\ref{sec:ps} presents
 the problem setting and states the precise localization problem.
 Section~\ref{sec:localalgo}
-presents the main localization algorithm and Section~\ref{sec:extensionalgo} describes the extension of the joint localizationa and observation model estimation algorithm. 
+presents the main localization algorithm and Section~\ref{sec:extensionalgo} describes the extension of the joint localization and observation model estimation algorithm. 
 We present experimental validation in Section~\ref{sec:eval} and finally we conclude in
 Section~\ref{sec:concl}.
 
@@ -204,31 +204,27 @@ Section~\ref{sec:concl}.
 
 
 \section{Relevant 5G Terminologies}
-\label{sec:bg}
-NOTE: This section needs to be updated. Now, it is copied from previous paper, thus, it is about LTE.
-
-Though our techniques could apply to any future cellular system, we use LTE
-terminologies for convenience. The terminologies~\cite{ltebook} relevant for our purpose are
-described below.
+Though our techniques could apply to any future cellular system, we use $5$G New Radio (NR) 
+terminologies for convenience. The terminologies~\cite{3gpp38series} relevant for our purpose are described below.
 
 {\em UE (user equipment):} UE refers to the mobile end-device.
 
-{\em Cell:} In LTE networks, a cell refers to coverage footprint of a base station
-transmitter typically ensuring a cell coverage radius around 0.5~km-5~km.  In LTE
-macro cells, each cell typically has a directional base-station transmitter with
-$120^\circ$ sectorized antennas.
+{\em Cell:} In $5$G networks, a cell refers to coverage footprint of a gNodeB transmitter. Since $5$G networks are expected operate in diverse spectrum bands, the cell coverage can vary from as low 100m to 5km. Typically, each cell is expected to cover an azimuth range of $120^\circ$ using sectorized antennas.
 
-{\em gNodeB (gNB):} The eNB is the network element that interfaces with the UE and
+{\em gNodeB (gNB):} The gNB is the network element that interfaces with the UE and
 hosts critical protocol layers like PHY, MAC, and Radio Link Control (RLC) etc. Each
-eNB typically has 3~base station transmitters with $120^\circ$ antennas.
+gNB could have multiple transmission and reception points (TRP). Typical number number of TRPs is $3$ for full coverage around the gNB.
 
-{\em Reference Signal Received Power (SSSRP):} In LTE networks, UEs make certain
-measurements of received signal strength for each nearby cell transmitter. RSRP is
-the total measured time-average received power at UE of all downlink reference
-signals across the entire bandwidth from a {\em given cell transmitter}. RSRP is a
-measure of the received signal strength of a cell transmitter at a UE.
+{\em Secondary Synchronization Reference Signal Received Power (SS-RSRP):} In $5$G networks, UEs make certain
+measurements of received signal strength on the secondary synchronization (SS) signal for each nearby cell transmitter. SS-RSRP is
+the total measured time-average received power at UE from the SS signals 
+from a {\em given cell transmitter}. 
 
-{\em beam indices:} RSSI (Received Signal Strength Indicator) is the total measured
+{\em beam indices:} In 5G-NR, there is the concept of a SS/PBCH block on the downink which comprises of a set of symbols ($4$) during which beamformed transmissions in a particular direction from gNB could take place. Each SS/PBCH block is identified by an index which the UE uses to report back measurements during a given SS/block. The beam indices we refer to in this paper correspond to the SS/PBCH block index and can have a range from $0$ to $63$ in standards. We use a grid of beams with upto$56$ possible directions in the performance evaluation section.  
+
+
+
+{\em RSSI and RSRQ} RSSI (Received Signal Strength Indicator) is the total measured
 received power at the UE over the entire band of operation from {\em all cell
 transmitters.} RSRQ of a given cell transmitter at a UE is RSSI scaled by average
 RSRP (of that cell) per reference symbol.
@@ -239,47 +235,49 @@ data is stored.
 \begin{figure}[t]
 \begin{center}
 \includegraphics[height=3.5in,width=3.2in]{./ONAP-architecture.png}
-\caption{\label{fig:lumd_arch}
-{\small LUMD Data Collection.}}
+\caption{\label{fig:onap_arch}
+{\small ONAP architecture}}
 \end{center}
 \end{figure}
 
 
 
-{\em Measurement data collection architecture:} The LUMD data collection architecture
-is shown in Figure~\ref{fig:lumd_arch}. LUMD is collected at both the eNodeB and MME
-(Mobility Management Entity). The MME serves as the coordinator of the LUMD data.
-After LUMD collection is turned on at the eNodeB, it collects the records and sends
-the data to the MME. MME aggregates and temporarily saves LUMD from multiple
-eNodeBs and sends it periodically (typically in minutes time-scale) to the data
-center where LUMD is saved and analyzed. Scalable storage of LUMD, which can easily
+{\em ONAP} This stands for Open Nework Automation Platform and provides comprehensive platform for real time policy diven orchestration and automa-
+tion of physcial and virtual network functions that will enable software, network,
+it and cloud providers and developers to rapidly create new services. Figure \ref{fig:onap_arch} shows the high level architecture. It is expected that in the context of $5$G networks and localization topic of this paper, ONAP would orchestrate the localization policy and associated cloud storage within the "Policy framework", "Data Collection, Analytics and Events (DCAE)" and "Service orchestration" components of the run-time module. 
+
+{\em Measurement data collection architecture:} The NR UE measurement data (NUMD) collection process occurs primarily in the 5G network via the gNB and Mobility Management Entity (MME). The MME serves as the coordinator of the NUMD data.
+After NUMD collection is turned on at the gNodeB, it collects the records and sends
+the data to the MME. MME aggregates and temporarily saves NUMD from multiple
+gNodeBs and sends it periodically (typically in minutes time-scale) to the data
+center  where NUMD is saved and analyzed (for example, ONAP). Scalable storage of NUMD, which can easily
 run into TB in a week per metropolitan, in the data center is an important design
 problem and beyond the scope of this paper.
 
 
-{\em Contents of LUMD:} LUMD record contains data related to signaling performance on
+{\em Contents of NUMD:} NUMD record contains data related to signaling performance on
 per UE, per bearer level for different procedures, user experience such as data
-throughput and procedure duration, eNodeB internal UE related data such as MIMO
-decision, SINR, buffer size, and normalized power headroom etc.  What information is
+throughput and procedure duration, gNodeB internal UE related data such as MIMO
+decision, SINR, buffer size, and normalized power headroom etc.  The information
 present depends on procedure/event that led to the measurement record. For our
-purpose, we are interested in RF information contained in measurement records. These
-are RSRP and RSRQ information. A LUMD record contains the following RF information:
-
-\begin{itemize}
-
-\item {\em RSRP:} Most LUMD contain RSRP of the serving cell that a UE is associated
-with. In addition, only when LUMD is generated due to an A3 or A4 event as described
-earlier in this section, it might also contain the RSRP of {\em one} neighboring
-cell (typically the strongest one).
-
-\item {\em beam indices:} LUMD also contains RSRQ of the serving cell. Note that once RSRP
-and RSRQ are known, the corresponding RSSI can be uniquely computed since RSRQ is
-defined as RSSI scaled by RSRP per reference symbol.
-
-\end{itemize}
-
-The important thing to note is that RSRP and RSRQ information is available from no
-more than two cells in an LUMD record.
+purpose, we are interested in RF information, and more specifically the SS-RSRP information contained in measurement records. 
+%A NUMD record contains the following RF information:
+%
+%\begin{itemize}
+%
+%\item {\em RSRP:} Most NUMD contain RSRP of the serving cell that a UE is associated
+%with. In addition, only when NUMD is generated due to an A3 or A4 event as described
+%earlier in this section, it might also contain the RSRP of {\em one} neighboring
+%cell (typically the strongest one).
+%
+%\item {\em beam indices:} NUMD also contains RSRQ of the serving cell. Note that once RSRP
+%and RSRQ are known, the corresponding RSSI can be uniquely computed since RSRQ is
+%defined as RSSI scaled by RSRP per reference symbol.
+%
+%\end{itemize}
+%
+%The important thing to note is that RSRP and RSRQ information is available from no
+%more than two cells in an NUMD record.
 
 
 %mobile measurement data, system, pcmd, data center, period
@@ -299,21 +297,21 @@ There are two two types of data relevant to our discussion:
 
 \item \textbf{Training data:} This is essentially geo-tagged data sent from
 a set of locations in the road graph nodes $V$. Precisely, we are given $n$ locations
-$\{x_i\}_{i=1}^n$ and for each location, up to four SSSRPs and beam indices of
-the serving cell. Note that standard allows each UE to report up to four best beam indices and corresponding SSSRPs.
-We denote by $\{B^{j}_{i,k}\}_{i=1}^n$, the jth best beam indices sent from training location $x_i$ with cell $k$ and $\{R^j_{i,k}\}_{i=1}^n$ are the corresponding signal strength 
+$\{x_i\}_{i=1}^n$ and for each location, up to four SS-RSRPs and beam indices of
+the serving cell. Note that in this study, we assume each UE to report up to four best beam indices and the corresponding SS-RSRPs.
+We denote by $\{B^{j}_{i,k}\}_{i=1}^n$, the jth best beam indices sent from training location $x_i$ in cell $k$ and $\{R^j_{i,k}\}_{i=1}^n$ are the corresponding signal strength 
 associated with those reported beam indices. Note
 that, for a location $x_i$, the data $R^j_{i,k}$  and $B^j_{i,k}$ are only available
 for a small subset of cells near location $x_i$. We will also denote the set of
 training data by $\mathcal{D}_{tr}$.
 
-\item \textbf{LUMD data or observed data:} This data is not geo-tagged but comes
+\item \textbf{NUMD data or observed data:} This data is not geo-tagged but comes
 with time stamp. Precisely, for every mobile, we are given time instants
-$t_i, i=1,2,\hdots,T$ for each $t_i$ we are also given SSSRP
+$t_i, i=1,2,\hdots,T$ for each $t_i$ we are also given SS-RSRP
 $\{{\tilde{R}}^j_k(t_i)\}_{j=1}^4$ and beam indices ${\{\tilde{B}}^j_k(t_i)\}_{j=1}^4$ where $k\in K(t_i)$; $K(t_i)$ denotes the set of cells reported by
 the mobile at time~$t$. Typically $\card{K(t_i)}$ takes value one or two.
-Though we have LUMD for each mobile-$m$, we drop the dependence of $m$
-on $R_k(t)$ and $K(t)$ as we are essentially perform the same algorithm
+Though we have NUMD for each mobile-$m$, we drop the dependence of $m$
+on $R_k(t)$ and $K(t)$ as we are essentially performing the same algorithm
 for each mobile separately. The locations of mobiles $\tilde{x}(t_i)$ at different
 times $t_i$ are unknown.
 	
@@ -322,11 +320,11 @@ times $t_i$ are unknown.
 Thus the problem can be stated as follows:
 
  {\bf Problem of localization in 5G network}: We are given training data consisting
-of locations $\{x_i\}_{i=1}^n$ and associated SSSRPs  $\{R^j_{i,k}\}_{i=1}^n$ and beam indices $\{B^j_{i,k}\}_{i=1}^n$of
+of locations $\{x_i\}_{i=1}^n$ and associated SS-RSRPs  $\{R^j_{i,k}\}_{i=1}^n$ and beam indices $\{B^j_{i,k}\}_{i=1}^n$of
 cell-$k$ at location $x_i$. Assume that the locations
 are drawn from locations in a road network given by $G_r=(V,E)$. Estimate the unknown location of a sequence of measurements
 ${\tilde{R}}^j_k(t_i)$ and ${\tilde{B}}^j_k(t_i)$ where $i=1,2,\hdots,m,\ k\in K(t_i), j=1, 2, 3, 4$. 
-Note that, in the algorithm illustration in this paper, we only focus on SSSRP and beam indices. However, in the field, there may be other measurement reports that 
+Note that, in the algorithm illustration in this paper, we only focus on SS-RSRP and beam indices. However, in the field, there may be other measurement reports that 
 can be used to help to improve the localization accuary. For example, timing alignment, etc. These addtional measurement reports can be easily incoorbated into our proposed algorithm.
 
 \section{Localization Algorithms}
@@ -334,7 +332,7 @@ can be used to help to improve the localization accuary. For example, timing ali
 
 The framework we use for tackling the localization problem is hidden markov model (HMM) as illustrated 
 in Figure~\ref{fig:hmm_particle}. The hidden states in HMM in our case are the locations and the velocity. 
-The observations corresponding to each hidden state are the reported measurement reports, such as SSSRP and the beam indices.
+The observations corresponding to each hidden state are the reported measurement reports, such as SS-RSRP and the beam indices.
 The system moves from one hidden state to another hidden state with some underlying mobility model. 
 The goal is to infer the hidden state from the observations based on
 prior knowledge about the transition probabilities between hidden states and
@@ -364,7 +362,7 @@ These transition
 probabilities model how transition happens from one hidden state
 to another. 
 We assume a suitable mobility model of the mobile which determines how it moves
-along the graph $G_r$ and also helps us to calculate the above probabilities. We
+along the graph $G_r$ and also helps us to calculate the above probabilities. Specifically, we
 assume that the mobile updates its speed according to Gauss-Markov Mobility Model ~\cite{Camp2002}.
 
 \begin{align}
@@ -392,7 +390,7 @@ y_t = y_{t-1} +S_{t-1}sin(d_{t-1})*\Delta t
 \end{align}
 
 where ($x_t$,$y_t$) and ($x_{t-1}$,$y_{t-1}$) are the x and y coordinates of the mobile’s position 
-at the $t$th and ($t-1$) st time intervals, respectively. $\Delta t$ is the duration of the time interval.
+at time intervals $t$ and $t+1$, respectively. $\Delta t$ is the duration of the time interval.
 
 \begin{algorithm}
 \caption{$5GLocalizeAlgo(\mathcal{D}_{tr},G,N_{th})$}
@@ -425,14 +423,17 @@ from prior distribution $p(\tilde{x}_1, \tilde{v}_1|G)$
 $p(\{\hat{x}^{(n)}\}_{i=1}^m|\{\tilde{R}^{1,2,3,4}_i\}_{i=1}^m,\{\tilde{B}^{1,2,3,4}_i\}_{i=1}^m,G) = w_m^{(j)}$ for $n=1$ to $N$
 \end{algorithmic}
 \end{algorithm}  
+
+ \textbf{[QUESTION: in Algorithm 1, what is $N_{th}$?]} 
+
 \section{Observation modeling using machine learning}
 \label{sec:channel-model}
 As mentioned in the above section, one of the important inference of HMM is the likelihood of observation metric at given state. In this section, we discuss how to infer the likehihood based 
-on the observation metrics, i.e., SSSRP and beam indices in 5G network. 
+on the observation metrics, i.e., SS-RSRP and beam indices in a 5G network. 
 \subsection{Inference on likelihood of beam indices}
 \label{sec:prob-classification}
 As part of the observations of HMM model, UE reports up to four observed best beam indices. The probability
-distribution (also called the likelihood function) of a particular observed beam indices as its $j$-th ($j=1, 2, 3, 4$) best reported beam indices
+distribution (also called the likelihood function) of a particular observed beam index such as its $j$-th ($j=1, 2, 3, 4$) best reported beam indices
 at a given location is denoted by
 $p(\tilde{B}^j_i|\hat{x}_{i})$. In our approach, these probabilities
 can be learnt from the drive test data using machine learning classification algorithms.
@@ -443,10 +444,10 @@ The classification steps are as follows:
 
 \begin{enumerate}
 
-\item For each location, each base station that can be heard at that location, we
+    \item For each location and each base station that can be heard \textbf{[QUESTION: what is heard implying? Suffiicient received power?] }  at that location, we
 take the corresponding drive test data beam indices. 
 
-\item For each cell, model the likelihood of a certain classification (beam indices) using {\em Random Forest} where the latitude and the longitude are 
+\item For each cell, we model the likelihood of a certain classification (beam indices) using {\em Random Forest} where the latitude and the longitude are 
 taken as features of the model and the likelihood of the beam indices is the output. Each such {\em
 Random Forest} is trained using data aggregated in previous step.
 
@@ -454,11 +455,11 @@ Random Forest} is trained using data aggregated in previous step.
 reporting a specific beam indices. The function $predict\_proba(X)$ can be used to get the probability of class $X$. 
 
 \end{enumerate}
-\subsection{Inference on likelihood of SSSRP}
+\subsection{Inference on likelihood of SS-RSRP}
 \label{sec:prob-reg}
-The SSSRP reported at different states
+The SS-RSRP reported at different states
 is part of the observations of HMM model. The probability
-distribution (also called the likelihood function) of an observed SSSRP on a location is denoted by
+distribution (also called the likelihood function) of an observed SS-RSRP on a location is denoted by
 $p(\tilde{R}_i|\hat{x}_{i})$. In our approach, these probabilities
 can be learnt from the training data using machine learning regression algorithms. 
 There are different machine learning regression algorithm in the literature.
@@ -466,7 +467,7 @@ However, SSSPR has the following two special properties:
 \begin{itemize}
 	\item The drive test data is spread over a non-contiguous location because coverage
 	areas in a cell are not necessarily connected.
-	\item  Wireless SSSRP manifests quite different properties in different locations
+	\item  Wireless SS-RSRP manifests quite different properties in different locations
 \end{itemize}
 
 Thus, we use random forest regressor to segment the area into locations where the SSSPRs
@@ -475,19 +476,19 @@ exhibit strong spatial correlation.
 The regressions steps are as follows:
 
 \begin{enumerate}
-\item For each location, each base station and each reported beam indices that can be heard at that location, we
+\item For each location, each base station and each reported set of beam indices that can be heard at that location, we
 take the empirical mean and standard deviation of all corresponding drive test data
-SSSRP. 
+SS-RSRP. 
 
-\item For each cell and each beam indices, model the spatial variation of SSSRP-statistics (i.e., mean and
+\item For each cell and each beam indices, model the spatial variation of SS-RSRP-statistics (i.e., mean and
 standard deviation) using {\em Random Forest} where the latitude and the longitude are 
-taken as features of the model and the SSSRP-statistic  of the cell is the output. Each such {\em
+taken as features of the model and the SS-RSRP-statistic  of the cell is the output. Each such {\em
 Random Forest} is trained using data aggregated in previous step. Also,
-compute the mean square error (or {\em cross validation error})
+computed is the mean square error (or {\em cross validation error})
 for each random forest. 
 
-\item Denote by $RndFrst_m(x,b,c)$ ($RndFrst_s(x,c)$) the random forest predictor of
-mean (standard deviation) of SSSRP for cell-$c$, beam-$b$
+\item Denote by $RndFrst_m(x,b,c)$ ($RndFrst_s(x,b,c)$) the random forest predictor of
+mean (standard deviation) of SS-RSRP for cell-$c$, beam-$b$
 at location $x$. Let $(\sigma_{RF}(b,c))^2$ be the corresponding
 mean square error of the predictor. Then we model
 \begin{align}
@@ -496,14 +497,14 @@ p(\tilde{R}^j_i|\hat{x}_{i}, \tilde{B}^j_i) =
 \label{eqn:rndfrst}
 \end{align}
 where $$\sigma_c^2(x) = RndFrst_s(x,b,c) + \sigma_{RF}^2(b,c)\,$$ 
-and the serving cell-$c$ can be obtained from the LUMD record. In general, we
+and the serving cell-$c$ can be obtained from the NUMD record. In general, we
 can choose any spatial regressor instead of random forest. However, choosing
 random forest makes the model robust to cell propogation properties and to the
 fact that the coverage area of the cell could be disjoint.
 \end{enumerate}
 
 Note that in LTE network, the regression algorithm is implemented per cell. However, in 5G, with the existence of
-beam indices, the regression algorithn is now implemented per cell and per beam indices.
+beam indices, the regression algorithn is now implemented per cell and per beam index.
 
 
 \subsection{Inference on the likelihood of combined observations}
@@ -524,7 +525,7 @@ The likelihood of seeing all the observations, $\{\tilde{R^j_i}\}_{j=1}^4$ and $
 
 \section{Extension: Joint Localization and Channel Modling}
 \label{sec:extensionalgo}
-In this section we describe our main algorithm for joint observation modeling and UE
+In this section we describe our main algorithm for joint observation modelling and UE
 localization. The Joint Observation Modeling and Localization (JOML) algorithm takes
 as input the labeled and unlabeled datasets $\mathcal{D}_1,\mathcal{D}_2,$ the
 graph $G$ and a parameter $N_{em}$ specifying the number of
@@ -572,20 +573,22 @@ The high level pseudo-code of the algorithm is shown in Algorithm \ref{alg:joint
 \end{algorithmic}
 \end{algorithm}  
 
+ \textbf{[QUESTION: I see some inconsistency in the Algorithm 2 description. It is using Algorithm 1. However, Algorithm 1 is taking as input dataset, graph G and ${N_th}?$. While here it is taking as input dataset, C (a function) and G]} 
+
 Note that in line \ref{line:em_approx} $\{\hat{x}_i\}_{i=1}^m$ can be the mode
 or samples from the distribution
 $p(\{\hat{x}_i,\tilde{R}^j_i, \tilde{B}^j_i\}_{i=1}^m,|\mathcal{C},G)$ as a stochastic
 approximation for the EM algorithm. The JOML algorithm uses two main
 subroutines. The first subroutine $ObservationModel$ computes the likelihood function
 $\mathcal{C}$ from the labeled dataset $\mathcal{D}.$ $\mathcal{C}$ can be
-viewed as a function which can output the distribution of SSSRP and beam indices from any base
+viewed as a function which can output the distribution of SS-RSRP and beam indices from any base
 station $k$ to any UE location $x \in V.$ The second subroutine $5GLocalizeUE$
-use the observation model function $\mathcal{C},$ the LUMD data
+use the observation model function $\mathcal{C},$ the NUMD data
 $\{\tilde{R}_i,T_i\}$ and the graph $G$ to come up with location estimates of
 the UE $\{\hat{x}_i\}_{i=1}^m$ and its corresponding distribution as illustrated in section ~\ref{sec:localalgo}. Each time a
 location estimate is computed it is used with the corresponding record
 $\tilde{R}^j_i$, $\tilde{B}^j_i$ and the dataset $\mathcal{D}_1$ to further improve the channel
-model using an expectation-maximization procedure. Therefore in the next
+model \textbf{[QUESTION: why are we calling this a channel model? Are we predicting the channel? Are we not only predicting SS-RSRP and beam indices?] } using an expectation-maximization procedure. Therefore in the next
 iteration we can obtain a better location estimate. 
 
 %\fi
@@ -595,19 +598,19 @@ iteration we can obtain a better location estimate.
 \label{sec:eval}
 
 In this section, we present evaluation of our proposed technique. The objective of
-our evaluation is three folds: to understand the accuracy of our localization scheme, to evaluate
+our evaluation is three folds \textbf{[QUESTION: why are we saying three folds? should it be two fold?] } : to understand the accuracy of our localization scheme, to evaluate
 how much the accuracy depends of fraction of network coverage area that is drive
 tested.
 
 \subsection{Methodology}
-In this paper, we focus on one isolated cell in 5G network, which is the measurement report
+In this paper, we focus on one isolated cell in 5G network, where the measurement report
 only has the information of the serving cell. In the field, when we have multiple cells, the additional
-information on the measruement report from neigboring cells can be easily incoorbated into the proposed algorithm and improve the 
-localization accuary. As there is no commercial deployed 5G network yet, we dont have the drive test data from the field.
+information on the measurement report from neighboring cells can be easily incorporated into the proposed algorithm to improve the 
+localization accuary. This could include information such as RSRQ and RSSI. As there is no commercial deployed 5G network yet, we dont have the drive test data from the field.
 Instead, we use our 5G system simulator to generate both training data and test data.
 
-The 5G system we use in this evaluation is operating at mmwave band, and the cell ISD is 100m. The testing data points are illustrated in 
-Figure ~\ref{fig:training}. Instead of diving the training data into training and validation, we use the gridsearchCV and cross validation functionaility in 
+The 5G system that we use in this evaluation is operating at mmwave band, and the cell ISD is 100m. The testing data points are illustrated in 
+Figure ~\ref{fig:training}. Instead of diving the training data into training and validation, we use the gridsearch and cross validation functionaility in 
 sklearn ~\cite{sklearn} to avoid the overfitting since we have limited number of training data.
 
 \begin{figure}[t]
@@ -670,13 +673,15 @@ detailed analysis of the results.
 {\em Inference accuarcy} 
 Figure~\ref{fig:beam_map_cdf1} and Figure~\ref{fig:beam_map_cdf2} illustrate the beam indices at different locations when RF channel conditons are LoS and mixed LoS\&NLoS, respectively. Figure~\ref{fig:beam_map_cdf3} and Figure~\ref{fig:beam_map_cdf4}
 shows the predicted beam indices using random forest classification. As we can see from these figures, when the training data is more spreaded as shown in Figure ~\ref{fig:beam_map_cdf2},
-the random forest classifier will divided the whole area into smaller region. The accuracy sore for LoS is 0.78 and for mixed LoS\&NLoS case is 0.57.
+the random forest classifier will divided the whole area into smaller region. The accuracy score \textbf{[QUESTION: should we define what accuracy score means? Is a value of 1 the best?]}  for LoS is 0.78 and for mixed LoS\&NLoS case is 0.57.
 
 {\em Accuracy CDF:} In Figure~\ref{fig:cdf1} and Figure~\ref{fig:cdf2}, we show the
-accuracy distribution under two different type of RF channel condition, line of sight (LoS) vs. Mixed LoS \& NLoS. The RF channel scenarios are illustrated in
+accuracy distribution under two different type of RF channel condition, pure line of sight (LoS) and mixed LoS \& non-LoS(NLoS) . More details of these scearions can be found in 
 ~\cite{3gpp38901}. With LoS channel, the median accuracy is around
-$4m$ and with Mixed LoS and NLoS channel, the median accuracy is around $12m$.These results have not included additional constraints such as that users move on prescribed paths such was walkways etc. as well as additional columns in the data matrix such as TA, etc. 
-With the additional information, the localization accuracy is expected to improve further.
+$4m$, while with mixed LoS and NLoS channel, the median accuracy is around $12m$.These results have not included additional constraints such as users moving on prescribed paths such as walkways etc. as well as additional columns in the data matrix such as TA, etc. 
+With this additional information, the localization accuracy is expected to improve further.
+
+ \textbf{[QUESTION: should the next para be reworded? it does not seem to connect well to the previous para...]} 
 
 The rationale behind localizing the path taken by a mobile is two-fold: first,
 localization accuracy of the individual points can be improved if there is a
@@ -695,7 +700,7 @@ moving.
 % settings which is a significant improvement over more than 100m accuracy reported
 % with non machine learning based techniques. A more challenging problem is to identify
 % indoor locations at least in terms of buildings. This could require more training or
-% combining LUMD with Wi-Fi signatures available from mobiles.
+% combining NUMD with Wi-Fi signatures available from mobiles.
 
 
 
