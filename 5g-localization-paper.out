@@ -3,10 +3,10 @@
 \BOOKMARK [1][-]{section.3}{Problem Statement}{}% 3
 \BOOKMARK [1][-]{section.4}{Localization Algorithms}{}% 4
 \BOOKMARK [2][-]{subsection.4.1}{State transition probabilities and mobility model}{section.4}% 5
-\BOOKMARK [1][-]{section.5}{Machine learning based Channel modeling}{}% 6
-\BOOKMARK [2][-]{subsection.5.1}{Regression based Observation Likelihood}{section.5}% 7
-\BOOKMARK [2][-]{subsection.5.2}{Classification based Observation Likelihood}{section.5}% 8
-\BOOKMARK [2][-]{subsection.5.3}{Inference based Observation Likelihood}{section.5}% 9
+\BOOKMARK [1][-]{section.5}{Observation modeling using machine learning}{}% 6
+\BOOKMARK [2][-]{subsection.5.1}{Inference on likelihood of beam indices}{section.5}% 7
+\BOOKMARK [2][-]{subsection.5.2}{Inference on likelihood of SSSRP}{section.5}% 8
+\BOOKMARK [2][-]{subsection.5.3}{Inference on the likelihood of combined observations}{section.5}% 9
 \BOOKMARK [1][-]{section.6}{Extension: Joint Localization and Channel Modling}{}% 10
 \BOOKMARK [1][-]{section.7}{Evaluation}{}% 11
 \BOOKMARK [2][-]{subsection.7.1}{Methodology}{section.7}% 12

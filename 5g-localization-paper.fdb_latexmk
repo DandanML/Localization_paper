@@ -1,16 +1,16 @@
 # Fdb version 3
-["bibtex 5g-localization-paper"] 1514998647 "5g-localization-paper.aux" "5g-localization-paper.bbl" "5g-localization-paper" 1514998647
-  "5g-localization-paper.aux" 1514998634 8138 1bab19f4dbf6d64882f005ece4847069 ""
+["bibtex 5g-localization-paper"] 1515022213 "5g-localization-paper.aux" "5g-localization-paper.bbl" "5g-localization-paper" 1515022275
+  "5g-localization-paper.aux" 1515022234 8184 71136ead28621f6cc6e88a07b2882a13 ""
   "c:/texlive/2017/texmf-dist/bibtex/bst/base/acm.bst" 1513378212 21064 c61a48664f3c347ce7f73c1a6a530506 ""
   "myref.bib" 1514155283 56424 27d5191c07c63887caa789e3337f99c2 ""
   (generated)
   "5g-localization-paper.blg"
   "5g-localization-paper.bbl"
-["pdflatex"] 1514998648 "c:\DandanWang\ML\Localization\5GLocalization\Paper\5g_localization_paper\Localization_paper\5g-localization-paper.tex" "5g-localization-paper.pdf" "5g-localization-paper" 1514998648
-  "5g-localization-paper.aux" 1514998634 8138 1bab19f4dbf6d64882f005ece4847069 ""
-  "5g-localization-paper.bbl" 1514998648 876 1018ab56874d14a94eb66543cb4a270f "bibtex 5g-localization-paper"
-  "5g-localization-paper.out" 1514998634 1019 03b75e06bc7c4fc7be3d9d95fa2f6f4f ""
-  "5g-localization-paper.tex" 1514998643 35865 95c1977dc3ae1ea78ac2d62a24ab2408 ""
+["pdflatex"] 1515022276 "c:\DandanWang\ML\Localization\5GLocalization\Paper\5g_localization_paper\Localization_paper\5g-localization-paper.tex" "5g-localization-paper.pdf" "5g-localization-paper" 1515022275
+  "5g-localization-paper.aux" 1515022234 8184 71136ead28621f6cc6e88a07b2882a13 ""
+  "5g-localization-paper.bbl" 1515022222 876 1018ab56874d14a94eb66543cb4a270f "bibtex 5g-localization-paper"
+  "5g-localization-paper.out" 1515022234 1026 4c8d1d1c1fb9c4a5d9ef6c0bbec6d6a7 ""
+  "5g-localization-paper.tex" 1515022272 35826 67e6e81c328fae415f0ac207f38d441e ""
   "Accuracy_cdf_LoS.png" 1514149183 22108 09dfa08a1bf061860ac4b81112217f85 ""
   "Accuracy_cdf_MixedLoS_NLoS.png" 1514149214 25863 e77d817d21987874c47f67e9f1b79313 ""
   "Beam_map_LoS.png" 1514148199 132592 ad82ff2ff75051495ed80dbfaff195bf ""
@@ -128,9 +128,9 @@
   "c:/texlive/2017/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1513387963 2559604 9509d9bbab932a6eaed6d61a12a45451 ""
   "c:/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt" 1513388208 4127105 40c4fac974559de27fb0cfc30232c34a ""
   "c:/texlive/2017/texmf.cnf" 1513387873 673 4ae7b2f49cee444c5343a45b5d0f169c ""
-  "c:\DandanWang\ML\Localization\5GLocalization\Paper\5g_localization_paper\Localization_paper\5g-localization-paper.tex" 1514998643 35865 95c1977dc3ae1ea78ac2d62a24ab2408 ""
+  "c:\DandanWang\ML\Localization\5GLocalization\Paper\5g_localization_paper\Localization_paper\5g-localization-paper.tex" 1515022272 35826 67e6e81c328fae415f0ac207f38d441e ""
   (generated)
+  "5g-localization-paper.pdf"
+  "5g-localization-paper.out"
   "5g-localization-paper.aux"
   "5g-localization-paper.log"
-  "5g-localization-paper.out"
-  "5g-localization-paper.pdf"
