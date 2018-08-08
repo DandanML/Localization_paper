@@ -94,14 +94,14 @@
 
 \fi
 
-\title{Localization of Measurement Records in 5G wireless networks}
+\title{Localization of Mobile Devices in 5G Wireless Networks}
 % author names and affiliations
-\author{Paper Id: xxxx}
-%\author{\IEEEauthorblockN{XXX, XXX}
-%\IEEEauthorblockA{Nokia \\
-%Murray Hill, NJ, USA \\
-%\emph{\{xxx, xxx\}@nokia.com}}
-%}
+%\author{Paper Id: xxxx}
+\author{\IEEEauthorblockN{Dandan Wang, Gurudutt Hosangadi, Pantelis Monogioudis,  Anil Rao}
+\IEEEauthorblockA{Nokia \\
+Murray Hill, NJ, USA \\
+\emph{\{dandan.wang, gurudutt.hosangadi, pantelis.monogioudis, anil.rao\}@nokia.com}}
+}
 
 
 \begin{document}
@@ -111,25 +111,14 @@
 
 \begin{abstract}
 
-% As cellular networks like 4G~LTE networks get more and more sophisticated, mobiles
-% also measure and send enormous amount of mobile measurement data (in
-% TBs/week/metropoliton) during every call and session. The mobile measurement records
-% are saved in data center for further analysis and mining, however, these measurement
-% records are not geo-tagged because the measurement procedures are implemented in
-% mobile LTE stack. Geo-tagging (or localizing) the stored measurement record is a
-% fundamental building block towards network analytics and troubleshooting since the
-% measurement records contain  rich information on call quality, latency, throughput,
-% signal quality, error codes etc. In this work, our goal is to localize these mobile
-% measurement records. Precisely, we answer the following question: {\em what was the
-% location of the mobile when it sent a given measurement record?} We design and
-% implement novel machine learning based algorithms to infer whether a mobile was
-% outdoor and if so, it infers the latitude-longitude associated with the measurement
-% record. The key technical challenge comes from the fact that measurement records do
-% not contain sufficient information required for triangulation or RF fingerprinting
-% based techniques to work by themselves. Experiments performed with real data sets
-% from an operational 4G network in a major metropolitan show that, the median accuracy
-% of our proposed solution is around 20~m for outdoor mobiles and outdoor
-% classification accuracy is more than $98\%$.
+As wireless network is evolving into 5G, tremendous data will be shared on the newly developed open source platforms. These data can be used
+in developing new service. Among which, Location information
+of mobile devices are exetremly useful. For example, the location information can be used to assist
+wireless operators to trouble shoot the network performance. It can also be used to provide some location assisted service. However, some of these devices may be designed for
+limited budget that do not have the capability of GPS. Furthermore, operators may not have access to the GPS information
+on the mobile devices. In this paper, we propose a novel machine learning based approach to estimate the location of the mobile devices 
+based on the measurement data that mobiles reported during every call and session. Our proposed algorithm utilizes the advanced features of 5G wireless network, such as the beam information.
+Simulaiton shows that the proposed solution can achieve 10~m accuary for outdoor mobiles. And the proposed algorithm can also work even with only the information from one base station. 
 
 \end{abstract}
 
@@ -149,23 +138,23 @@ device, the serving cell, the signal strength, etc. In ~\cite{Pantelis2016Locali
 the location when measurement reports are made in LTE systems. The paper shows that the medium accuracy of 20m can be achieved for outdoor mobibles. 
 When celluar network evloves from 4G LTE to 5G, a lot of changes have been made to support lower latency and higher throughput. While multiple input multiple output (MIMO) has been extensively used in LTE, the most profound advancement of technology adopted in 5G
 network is the utilization of a high number of (massive) MIMO antennas especially in the high band. With the use of massive MIMO, transmit power can be effectively beamformed and the mobile will report beam related metric to the base station. 
-In this paper, we propose a new localization algorithm to estiamte the location of the measruement report utilizing the new reported metric introduced in 5G network.
+Therefore, the approach proposed in ~\cite{Pantelis2016Localization} for LTE can not be used directly for 5G network. In this paper, we propose a new localization algorithm to estimate the location of mobile devices utilizing the new reported metric introduced in 5G network.
  
 \textbf{[QUESTION: Does localization in 5G provide improved accuracy compared to localization in LTE. Do we need to say something about this?]}
+\textbf{[Ans: since it is not easy to direct compare 4G vs. 5G, I added one sentence to say the approach proposed for LTe does not apply directly here.]}
 
 %Our goal - loc and class
-As the open source platformsi (such as ONAP, XRAN, etc) are still being developed,  it provides an opportunity to request different measurement 
+As the open source platforms (such as ONAP, XRAN, etc) are still being developed,  it provides an opportunity to request different measurement 
 metrics. 
-The goal of this work is two folds: 1). identify the measuremnets unique to 5G network for localization.
-2). estimate the latitude-longitude of the mobile when the measurement record was
-generated for 5G network. 
+The goal of this work are two folds: 1). identify the measurements unique to 5G network for localization.
+2). estimate the latitude-longitude of the mobile using the measurement record
+generated in 5G network. 
 %Our approach
 
-In this paper, we combine the localization principles based on RF 
-fingerprinting and probablitistic path-tracking used for robot localization, which is similar to ~\cite{Pantelis2016Localization}. However, different from ~\cite{Pantelis2016Localization}, the unique property of 5G network, such as the beamrelated 
+In this paper, we design the localization algorithm combining the unique RF 
+fingerprinting in 5G network and probablitistic path-tracking used for robot localization. The unique property of 5G network, such as the beam related 
 information is used in this paper. The focus of this paper is on estimating location for outdoor mobiles. 
-At a high level, our approach has two steps for
-localizing measurement records from outdoor mobiles:
+At a high level, our approach has two steps:
 
 \begin{enumerate}
     \item Instead of viewing each NR UE measurement data (NUMD) record in isolation, for each mobile, we {\em stitch}
@@ -284,7 +273,7 @@ purpose, we are interested in RF information, and more specifically the SS-RSRP 
 \section{Problem Statement} 
 \label{sec:ps}
 
-Consider in an 5G network, mobiles travel along a road network represented by a graph $G_r=(V,E)$ where $V$
+Consider in an 5G network, mobiles travel along a road represented by a graph $G_r=(V,E)$ where $V$
 denotes graph nodes represented by a latitude-longitude tuple and $E$ denotes
 valid direct path between two nodes.
 
