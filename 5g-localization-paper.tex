@@ -273,18 +273,17 @@ purpose, we are interested in RF information, and more specifically the SS-RSRP 
 \section{Problem Statement} 
 \label{sec:ps}
 
-Consider in an 5G network, mobiles travel along a road represented by a graph $G_r=(V,E)$ where $V$
+Consider in a 5G network, mobiles travel along a road represented by a graph $G_r=(V,E)$ where $V$
 denotes graph nodes represented by a latitude-longitude tuple and $E$ denotes
-valid direct path between two nodes.
-
-There are two two types of data relevant to our discussion:
+valid direct path between two nodes. To estimate the location $V$ of this mobile, there are two types of data
+used in our proposed algorithm:
 
 \begin{enumerate}
 
 \item \textbf{Training data:} This is essentially geo-tagged data sent from
-a set of locations in the road graph nodes $V$. Precisely, we are given $n$ locations
-$\{x_i\}_{i=1}^n$ and for each location, up to four SS-RSRPs and beam indices of
-the serving cell. Note that in this study, we assume each UE to report up to four best beam indices and the corresponding SS-RSRPs.
+a set of locations in the road graph nodes $V$. The size of the training set is $n$, which include $n$ locations
+$\{x_i\}_{i=1}^n$ and the corresponding SS-RSRP and beam indices at each location for each serving cell. Based on ~\cite{5GTF}, 
+the mobile at each location can report up to four best beam indices and the corresponding SS-RSRPs.
 We denote by $\{B^{j}_{i,k}\}_{i=1}^n$, the jth best beam indices sent from training location $x_i$ in cell $k$ and $\{R^j_{i,k}\}_{i=1}^n$ are the corresponding signal strength 
 associated with those reported beam indices. Note
 that, for a location $x_i$, the data $R^j_{i,k}$  and $B^j_{i,k}$ are only available
@@ -306,12 +305,12 @@ times $t_i$ are unknown.
 Thus the problem can be stated as follows:
 
  {\bf Problem of localization in 5G network}: We are given training data consisting
-of locations $\{x_i\}_{i=1}^n$ and associated SS-RSRPs  $\{R^j_{i,k}\}_{i=1}^n$ and beam indices $\{B^j_{i,k}\}_{i=1}^n$of
+of locations $\{x_i\}_{i=1}^n$ and associated SS-RSRPs  $\{R^j_{i,k}\}_{i=1}^n$ and beam indices $\{B^j_{i,k}\}_{i=1}^n$ of
 cell-$k$ at location $x_i$. Assume that the locations
-are drawn from locations in a road network given by $G_r=(V,E)$. Estimate the unknown location of a sequence of measurements
+are drawn from locations in a road network given by $G_r=(V,E)$. Thus, the problem is to estimate the unknown location of the mobiles when mobiles report a sequence of measurements
 ${\tilde{R}}^j_k(t_i)$ and ${\tilde{B}}^j_k(t_i)$ where $i=1,2,\hdots,m,\ k\in K(t_i), j=1, 2, 3, 4$. 
 Note that, in the algorithm illustration in this paper, we only focus on SS-RSRP and beam indices. However, in the field, there may be other measurement reports that 
-can be used to help to improve the localization accuary. For example, timing alignment, etc. These addtional measurement reports can be easily incoorbated into our proposed algorithm.
+can be used to help to improve the localization accuary. For example, timing alignment, etc. These addtional measurement reports can be easily incorporated into our proposed algorithm.
 
 \section{Localization Algorithms}
 \label{sec:localalgo}
