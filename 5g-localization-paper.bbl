@@ -1,0 +1,39 @@
+\begin{thebibliography}{1}
+
+\bibitem{5GTF}
+\url{http://www.5gtf.net/}.
+
+\bibitem{sklearn}
+{\em http://scikit-learn.org/}.
+
+\bibitem{3gpp38series}
+{\em http://www.3gpp.org/ftp/Specs/2017-12/ Release 15.0.0}.
+
+\bibitem{3gpp38901}
+{\em http://www.3gpp.org/ftp//Specs/archive/38\_series/38.901/38901-e20.zip}.
+
+\bibitem{Camp2002}
+{\sc Camp, T., Boleng, J., and Davies, V.}
+\newblock {A survey of mobility models for ad hoc network research}.
+\newblock {\em Wireless Communications and Mobile Computing, Special Issue:
+  Mobile Ad Hoc Networking – Research, Trends and Applications 2}, 5 (2002),
+  439–--547.
+
+\bibitem{doucet2009tutorial}
+{\sc Doucet, A., and Johansen, A.~M.}
+\newblock A tutorial on particle filtering and smoothing: Fifteen years later.
+\newblock {\em Handbook of nonlinear filtering 12}, 656-704 (2009), 3.
+
+\bibitem{Pantelis2016Localization}
+{\sc Ray, A., Deb, S., and Mnogioudis, P.}
+\newblock Localization of lte measurement records with missing information.
+\newblock In {\em IEEE INFOCOM 2016\/} (2016), pp.~1--9.
+
+\bibitem{ThrunParticleFilter}
+{\sc Thrun, S.}
+\newblock Particle filters in robotics.
+\newblock In {\em Proceedings of the Eighteenth Conference on Uncertainty in
+  Artificial Intelligence\/} (San Francisco, CA, USA, 2002), UAI'02, Morgan
+  Kaufmann Publishers Inc., pp.~511--518.
+
+\end{thebibliography}

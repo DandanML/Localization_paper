@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.8.7)  9 AUG 2018 09:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018/W32TeX) (preloaded format=pdflatex 2018.8.7)  10 AUG 2018 12:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -436,27 +436,31 @@ Document Style - pseudocode environments for use with the `algorithmicx' style
 \c@defn=\count137
 \c@ex=\count138
 \c@remark=\count139
- (./5g-localization-paper.aux)
+ (./5g-localization-paper.aux
+
+LaTeX Warning: Label `eqn:speed' multiply defined.
+
+)
 \openout1 = `5g-localization-paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 107.
-LaTeX Font Info:    ... okay on input line 107.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 107.
-LaTeX Font Info:    ... okay on input line 107.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 107.
-LaTeX Font Info:    ... okay on input line 107.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 107.
-LaTeX Font Info:    ... okay on input line 107.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 107.
-LaTeX Font Info:    ... okay on input line 107.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 107.
-LaTeX Font Info:    ... okay on input line 107.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 107.
-LaTeX Font Info:    ... okay on input line 107.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 109.
+LaTeX Font Info:    ... okay on input line 109.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 109.
+LaTeX Font Info:    ... okay on input line 109.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 109.
+LaTeX Font Info:    ... okay on input line 109.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 109.
+LaTeX Font Info:    ... okay on input line 109.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 109.
+LaTeX Font Info:    ... okay on input line 109.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 109.
+LaTeX Font Info:    ... okay on input line 109.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 109.
+LaTeX Font Info:    ... okay on input line 109.
 
 -- Lines per column: 56 (exact).
 \AtBeginShipoutBox=\box32
-Package hyperref Info: Link coloring OFF on input line 107.
+Package hyperref Info: Link coloring OFF on input line 109.
 (c:/texlive/2018/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
@@ -465,35 +469,217 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count140
 )
-LaTeX Info: Redefining \ref on input line 107.
-LaTeX Info: Redefining \pageref on input line 107.
-LaTeX Info: Redefining \nameref on input line 107.
+LaTeX Info: Redefining \ref on input line 109.
+LaTeX Info: Redefining \pageref on input line 109.
+LaTeX Info: Redefining \nameref on input line 109.
+
+(./5g-localization-paper.out) (./5g-localization-paper.out)
 \@outlinefile=\write3
 \openout3 = `5g-localization-paper.out'.
 
 
-c:/Dandan/ML/Localization/5GLocalization/Paper/5g_localization_paper/Localizati
-on_paper/5g-localization-paper.tex:107: I can't write on file `5g-localization-
-paper.pdf'.
-(Press Enter to retry, or Control-Z to exit; default file extension is `.pdf')
-Please type another file name for output
-c:/Dandan/ML/Localization/5GLocalization/Paper/5g_localization_paper/Localizati
-on_paper/5g-localization-paper.tex:107: Emergency stop.
-<to be read again> 
-                   \edef 
-l.107 \begin{document}
-                      
-*** (job aborted, file error in nonstop mode)
+(c:/texlive/2018/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count141
+\scratchdimen=\dimen146
+\scratchbox=\box33
+\nofMPsegments=\count142
+\nofMParguments=\count143
+\everyMPshowfont=\toks30
+\MPscratchCnt=\count144
+\MPscratchDim=\dimen147
+\MPnumerator=\count145
+\makeMPintoPDFobject=\count146
+\everyMPtoPDFconversion=\toks31
+) (c:/texlive/2018/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
- 
+(c:/texlive/2018/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.jpg,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+
+(c:/texlive/2018/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 111.
+
+
+(c:/texlive/2018/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/it' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 111.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 193.
+
+(c:/texlive/2018/texmf-dist/tex/latex/base/ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 193.
+
+(c:/texlive/2018/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 193.
+
+(c:/texlive/2018/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1{c:/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+
+]
+Underfull \hbox (badness 3769) in paragraph at lines 204--208
+[]\OT1/ptm/m/it/10 Secondary Syn-chro-niza-tion Ref-er-ence Sig-nal Re-ceived
+ []
+
+<./ONAP-architecture.png, id=79, 670.00313pt x 319.94531pt>
+File: ./ONAP-architecture.png Graphic file (type png)
+<use ./ONAP-architecture.png>
+Package pdftex.def Info: ./ONAP-architecture.png  used on input line 223.
+(pdftex.def)             Requested size: 231.26378pt x 252.9493pt.
+[2pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
+has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.292 
+       <./ONAP-architecture.png>]
+Underfull \hbox (badness 1939) in paragraph at lines 357--359
+[]\OT1/ptm/m/n/10 In the high-level, the pro-posed lo-cal-iza-tion al-go-rithm,
+
+ []
+
+<./HMM_ParticleFilter_Illustration.png, id=104, 622.57594pt x 279.29344pt>
+File: ./HMM_ParticleFilter_Illustration.png Graphic file (type png)
+<use ./HMM_ParticleFilter_Illustration.png>
+Package pdftex.def Info: ./HMM_ParticleFilter_Illustration.png  used on input l
+ine 370.
+(pdftex.def)             Requested size: 231.26146pt x 252.95137pt.
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 377.
+
+Underfull \hbox (badness 10000) in paragraph at lines 384--385
+[]\OT1/ptm/m/n/10 Ini-tial-ize im-por-tance weights $[] \OMS/cmsy/m/n/10  
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 391--392
+[] \OT1/ptm/m/n/10 Up-date weight $[] \OMS/cmsy/m/n/10   [] ^^B
+ []
+
+[3]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [4pdfTeX warning (ext4): destination with the same identifier (name{figure.2})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.466 \end{align}
+                  <./HMM_ParticleFilter_Illustration.png>]
+<./GM_training.png, id=140, 408.3255pt x 302.0886pt>
+File: ./GM_training.png Graphic file (type png)
+<use ./GM_training.png>
+Package pdftex.def Info: ./GM_training.png  used on input line 579.
+(pdftex.def)             Requested size: 231.26508pt x 173.45067pt.
+<./Combined_path_illustration.png, id=142, 421.575pt x 316.93407pt>
+File: ./Combined_path_illustration.png Graphic file (type png)
+<use ./Combined_path_illustration.png>
+Package pdftex.def Info: ./Combined_path_illustration.png  used on input line 5
+90.
+(pdftex.def)             Requested size: 231.2687pt x 173.45346pt.
+<./Accuracy_cdf_LoS.png, id=144, 534.49687pt x 306.39468pt>
+File: ./Accuracy_cdf_LoS.png Graphic file (type png)
+<use ./Accuracy_cdf_LoS.png>
+Package pdftex.def Info: ./Accuracy_cdf_LoS.png  used on input line 626.
+(pdftex.def)             Requested size: 238.49059pt x 180.67311pt.
+<./Accuracy_cdf_MixedLoS_NLoS.png, id=145, 541.27219pt x 311.66437pt>
+File: ./Accuracy_cdf_MixedLoS_NLoS.png Graphic file (type png)
+<use ./Accuracy_cdf_MixedLoS_NLoS.png>
+Package pdftex.def Info: ./Accuracy_cdf_MixedLoS_NLoS.png  used on input line 6
+29.
+(pdftex.def)             Requested size: 238.49086pt x 180.6751pt.
+ [5pdfTeX warning (ext4): destination with the same identifier (name{figure.3})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.651 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+4}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.651 
+       <./GM_training.png> <./Combined_path_illustration.png>]
+(./5g-localization-paper.bbl)
+
+** Conference Paper **
+Before submitting the final camera ready copy, remember to:
+
+ 1. Manually equalize the lengths of two columns on the last page
+ of your paper;
+
+ 2. Ensure that any PostScript and/or PDF output post-processing
+ uses only Type 1 fonts and that every step in the generation
+ process uses the appropriate paper size.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 666.
+[6pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) 
+has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.666 \end{document}
+                    
+
+ <./Accuracy_cdf_LoS.png> <./Accuracy_cdf_MixedLoS_NLoS.png>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 666.
+ (./5g-localization-paper.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 666.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 666.
+Package rerunfilecheck Info: File `5g-localization-paper.out' has not changed.
+(rerunfilecheck)             Checksum: CD48A4AFC526D88AFAFE99A08EBB2CE2;844.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 666.
+ ) 
 Here is how much of TeX's memory you used:
- 7296 strings out of 492642
- 108204 string characters out of 6133163
- 200076 words of memory out of 5000000
- 11136 multiletter control sequences out of 15000+600000
- 24710 words of font info for 54 fonts, out of 8000000 for 9000
+ 7973 strings out of 492642
+ 118469 string characters out of 6133163
+ 227249 words of memory out of 5000000
+ 11685 multiletter control sequences out of 15000+600000
+ 43381 words of font info for 92 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 28i,1n,27p,355b,102s stack positions out of 5000i,500n,10000p,200000b,80000s
-c:/Dandan/ML/Localization/5GLocalization/Paper/5g_localization_paper/Localizati
-on_paper/5g-localization-paper.tex:107:  ==> Fatal error occurred, no output PD
-F file produced!
+ 29i,16n,29p,694b,434s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2018/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2018/texmf-dist/fo
+nts/type1/public/amsfonts/cmextra/cmex7.pfb><c:/texlive/2018/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2018/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmmi5.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi7.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10
+.pfb><c:/texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/te
+xlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2018/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2018/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2018/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2018/texmf-dist/fonts/type1/urw/ti
+mes/utmb8a.pfb><c:/texlive/2018/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb><c
+:/texlive/2018/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2018/tex
+mf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on 5g-localization-paper.pdf (6 pages, 827714 bytes).
+PDF statistics:
+ 231 PDF objects out of 1000 (max. 8388607)
+ 199 compressed objects within 2 object streams
+ 52 named destinations out of 1000 (max. 500000)
+ 135 words of extra memory for PDF output out of 10000 (max. 10000000)
+
