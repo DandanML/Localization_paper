@@ -201,12 +201,9 @@ INPUT ./GM_training.png
 INPUT ./Combined_path_illustration.png
 INPUT ./Combined_path_illustration.png
 INPUT ./Combined_path_illustration.png
-INPUT ./Accuracy_cdf_LoS.png
-INPUT ./Accuracy_cdf_LoS.png
-INPUT ./Accuracy_cdf_LoS.png
-INPUT ./Accuracy_cdf_MixedLoS_NLoS.png
-INPUT ./Accuracy_cdf_MixedLoS_NLoS.png
-INPUT ./Accuracy_cdf_MixedLoS_NLoS.png
+INPUT ./Accuracy_ChannelModel.png
+INPUT ./Accuracy_ChannelModel.png
+INPUT ./Accuracy_ChannelModel.png
 INPUT 5g-localization-paper.bbl
 INPUT 5g-localization-paper.bbl
 INPUT c:/texlive/2018/texmf-dist/fonts/tfm/public/cm/cmr8.tfm

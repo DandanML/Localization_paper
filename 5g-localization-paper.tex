@@ -94,10 +94,10 @@
 
 \fi
 
-\title{Localization of Mobile Devices in 5G Wireless Networks}
+\title{Mobile Device Localization in 5G Wireless Networks}
 % author names and affiliations
 %\author{Paper Id: xxxx}
-\author{\IEEEauthorblockN{Dandan Wang, Gurudutt Hosangadi, Pantelis Monogioudis,  Anil Rao}
+\author{\IEEEauthorblockN{Dandan Wang, Gurudutt Hosangadi, Pantelis Monogioudis, Anil Rao}
 %\author{\IEEEauthorblockN{xxx, xxx, xxx,  xxx}
 \IEEEauthorblockA{Nokia \\
 Murray Hill, NJ, USA \\
@@ -113,14 +113,14 @@ Murray Hill, NJ, USA \\
 
 \begin{abstract}
 
-As wireless network is evolving into 5G, tremendous data will be shared on the newly developed open source platforms. These data can be used
-in developing new service. Among which, Location information
-of mobile devices are exetremly useful. For example, the location information can be used to assist
+As wireless networks are evolving into 5G, tremendous data will be shared on the newly developed open source platforms. These data can be used
+in developing new services. Among which, location information
+of mobile devices are extremely useful. For example, the location information can be used to assist
 wireless operators to trouble shoot the network performance. It can also be used to provide some location assisted service. However, some of these devices may be designed for
 limited budget that do not have the capability of GPS. Furthermore, operators may not have access to the GPS information
 on the mobile devices. In this paper, we propose a novel machine learning based approach to estimate the location of the mobile devices 
 based on the measurement data that mobiles reported during every call and session. Our proposed algorithm utilizes the advanced features of 5G wireless network, such as the beam information.
-Simulaiton shows that the proposed solution can achieve 10~m accuary for mixed LoS and NLoS enviorment. And the proposed algorithm can also work even with only the information from one base station. 
+Simulation shows that the proposed solution can achieve 10~m accuracy for mixed LoS and NLoS enviorment. And the proposed algorithm can also work even with only the information from one base station. 
 
 \end{abstract}
 
@@ -621,12 +621,7 @@ detailed analysis of the results.
 
 \begin{figure}[t]
 \begin{center}
- \subfigure[]{
- \includegraphics[height=2.5in, width=3.3in]{./Accuracy_cdf_LoS.png}
- \label{fig:cdf1}}
-\subfigure[]{
-\includegraphics[height=2.5in, width=3.3in]{./Accuracy_cdf_MixedLoS_NLoS.png}
-\label{fig:cdf2}}
+ \includegraphics[height=2.5in, width=3.3in]{./Accuracy_ChannelModel.png}
 \caption{CDF of accuracy.\label{fig:leapperf} with different RF channel condition (LoS vs. MixedLoS\&NLoS)}
 \end{center}
 \end{figure}

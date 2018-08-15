@@ -1,24 +1,23 @@
 # Fdb version 3
-["bibtex 5g-localization-paper"] 1533919630 "5g-localization-paper.aux" "5g-localization-paper.bbl" "5g-localization-paper" 1533919634
-  "5g-localization-paper.aux" 1533919633 5840 e2a2cfb7fdbebee0142c858df95a7ae9 ""
+["bibtex 5g-localization-paper"] 1534287077 "5g-localization-paper.aux" "5g-localization-paper.bbl" "5g-localization-paper" 1534290784
+  "5g-localization-paper.aux" 1534290783 5378 0d8b72ea9e8075b394e7c83db6494cfd ""
   "c:/texlive/2018/texmf-dist/bibtex/bst/base/acm.bst" 1533682098 21064 c61a48664f3c347ce7f73c1a6a530506 ""
   "myref.bib" 1533828461 59345 05186e2c25e243729b5439231646bb8b ""
   (generated)
-  "5g-localization-paper.bbl"
   "5g-localization-paper.blg"
-["pdflatex"] 1533919631 "c:/Dandan/ML/Localization/5GLocalization/Paper/5g_localization_paper/Localization_paper/5g-localization-paper.tex" "5g-localization-paper.pdf" "5g-localization-paper" 1533919634
-  "5g-localization-paper.aux" 1533919633 5840 e2a2cfb7fdbebee0142c858df95a7ae9 ""
-  "5g-localization-paper.bbl" 1533919631 1343 c3550785a433dc033573fb0d4e3fb15b "bibtex 5g-localization-paper"
-  "5g-localization-paper.out" 1533919633 844 cd48a4afc526d88afafe99a08ebb2ce2 ""
-  "5g-localization-paper.tex" 1533919614 37918 c36299708096eaaffe1e3ddb839478d3 ""
-  "Accuracy_cdf_LoS.png" 1514152783 22108 09dfa08a1bf061860ac4b81112217f85 ""
-  "Accuracy_cdf_MixedLoS_NLoS.png" 1514152814 25863 e77d817d21987874c47f67e9f1b79313 ""
-  "Combined_path_illustration.png" 1513560982 86842 dd30932586bbc74d7cb6077c4475d851 ""
+  "5g-localization-paper.bbl"
+["pdflatex"] 1534290782 "c:/Dandan/ML/Localization/5GLocalization/Paper/5g_localization_paper/Localization_paper/5g-localization-paper.tex" "5g-localization-paper.pdf" "5g-localization-paper" 1534290784
+  "5g-localization-paper.aux" 1534290783 5378 0d8b72ea9e8075b394e7c83db6494cfd ""
+  "5g-localization-paper.bbl" 1534287078 1343 c3550785a433dc033573fb0d4e3fb15b "bibtex 5g-localization-paper"
+  "5g-localization-paper.out" 1534290783 844 cd48a4afc526d88afafe99a08ebb2ce2 ""
+  "5g-localization-paper.tex" 1534287065 37773 d3ce1dd350cf6f8048995897b1ae3916 ""
+  "Accuracy_ChannelModel.png" 1534286873 66679 cc9edb369e65a48f04f34d2118d398b4 ""
+  "Combined_path_illustration.png" 1534290671 67339 ffd0e2f82458939b7f7cda4ac8ec93e4 ""
   "GM_training.png" 1514150145 117272 27c315daa49534b15363a5e017e0382e ""
   "HMM_ParticleFilter_Illustration.png" 1513553111 26259 49f7dfc1582d2b052b1db27bc8be338c ""
   "IEEEtran.cls" 1512850222 276163 5b8c27844c9c11d4ad81e78fc081963e ""
   "ONAP-architecture.png" 1513552232 374526 fff69257856ebfb969d619e99c5366e5 ""
-  "c:/Dandan/ML/Localization/5GLocalization/Paper/5g_localization_paper/Localization_paper/5g-localization-paper.tex" 1533919614 37918 c36299708096eaaffe1e3ddb839478d3 ""
+  "c:/Dandan/ML/Localization/5GLocalization/Paper/5g_localization_paper/Localization_paper/5g-localization-paper.tex" 1534287065 37773 d3ce1dd350cf6f8048995897b1ae3916 ""
   "c:/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc" 1533682591 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2018/texmf-dist/fonts/map/fontname/texfonts.map" 1533682878 3332 103109f5612ad95229751940c61aada0 ""
   "c:/texlive/2018/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1533685063 2172 fd0c924230362ff848a33632ed45dc23 ""
