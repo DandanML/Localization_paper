@@ -431,7 +431,7 @@ Each such classifier is trained using the data aggregated in the previous step.
 \item There are different machine learning classifiers in the literature. Considering the strong spatial correlation of the beam index, and also we will need to get the probability of class, random forest classifier is considered as a good choice. 
 In this paper, we use the random forest classifier in the machine learning library (sklearn) to predict the probability of 
 reporting a specific beam indices. The function $predict\_proba(X)$ can be used to get the probability of class $X$. Note that different classifiers were tested in the study and we found that
-neruon network and random forest provide similar performance. However, given more intuitive illustration of random forest, we decide to use random forest classifier.
+neural network and random forest provide similar performance. However, given the more intuitive illustration of random forest, we decided to use random forest classifier.
 \end{enumerate}
 \subsection{Inference on likelihood of SS-RSRP}
 \label{sec:prob-reg}
@@ -467,11 +467,11 @@ where $$\sigma_c^2(x) = RndFrst_s(x,b,c) + \sigma_{RF}^2(b,c)\,$$
 and the serving cell-$c$ can be obtained from the NUMD record. $\mathcal{N}$ represents the Gaussian distribution.
 In general, we
 can choose any spatial regressor instead of random forest. However, choosing
-random forest makes the model robust to cell propogation properties and to the
+random forest makes the model robust to cell propagation properties and to the
 fact that the coverage area of the cell could be disjoint.
 \end{enumerate}
 
-Note that in in 5G network, with the existence of beams, the regression algorithn is now implemented per cell and per beam index.
+Note that in a 5G network, with the existence of beams, the regression algorithn is now implemented per cell and per beam index.
 
 \subsection{Inference on the likelihood of combined observations}
 \label{sec:prob-combined}
@@ -632,7 +632,7 @@ detailed analysis of the results.
 
 %{\em Accuracy CDF:} 
 In Figure~\ref{fig:cdf1} and Figure~\ref{fig:cdf2}, we show the
-accuracy distribution under two different type of RF channel condition, pure line of sight (LoS) and mixed LoS \& non-LoS(NLoS). More details of these scearions can be found in 
+accuracy distribution under two different type of RF channel condition, pure line of sight (LoS) and mixed LoS \& non-LoS(NLoS). More details of these scenarios can be found in 
 ~\cite{3gpp38901}. With LoS channel, the median accuracy is around
 $4m$, while with mixed LoS and NLoS channel, the median accuracy is around $12m$.These results have not included additional constraints such as users moving on prescribed paths such as walkways etc. as well as additional columns in the data matrix such as TA, etc. 
 With this additional information, the localization accuracy is expected to improve further.
