@@ -339,15 +339,15 @@ d_t = \alpha d_{t-1}+(1-\alpha)\bar{d}+\sqrt{(1-\alpha^2)}d_{x_{t-1}}
 Specifically, at time interval t, a mobile's position is given by the equations.
 
 \begin{align}
-	x_t = x_{t-1} +S_{t-1}cos(d_{t-1})*\Delta t
+	l_t = l_{t-1} +S_{t-1}cos(d_{t-1})*\Delta t
 \label{eqn:mobilitymodelx}
 \end{align}
 \begin{align}
-y_t = y_{t-1} +S_{t-1}sin(d_{t-1})*\Delta t
+h_t = h_{t-1} +S_{t-1}sin(d_{t-1})*\Delta t
 \label{eqn:mobilitymodely}
 \end{align}
 
-where ($x_t$,$y_t$) and ($x_{t-1}$,$y_{t-1}$) are the x and y coordinates of the mobile’s position 
+where ($l_t$,$h_t$) and ($l_{t-1}$,$h_{t-1}$) are the latitude and longitude coordinates of the mobile’s position 
 at time intervals $t$ and $t-1$, respectively. $\Delta t$ is the duration of the time interval.
 
 However, it is difficlut to obtain analytic solutions for HMM and particle filter has been widely used to provide approximate solutions to these intractable inference problems~\cite{doucet2009tutorial}~\cite{ThrunParticleFilter}.
