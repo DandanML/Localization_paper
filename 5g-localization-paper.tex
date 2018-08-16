@@ -133,12 +133,12 @@ Simulation shows that the proposed solution can achieve 10~m accuracy for mixed 
 
 Fueled with the emerging cloud technologies (cloud computing, cloud storage, etc), software defined network (SDN) together with 
 network functions virtualization (NFV) is transforming the techonology, and business models in telcommunication industry.
-Several open source platforms (ONAP, XRAN, etc) have emerged to provide a platform to collect data and share technogies among different 
-vendors and operators. As the wireless network is now evolving into 5G, tremendous data will be shared in these open source platform and thus create 
+Several open source platforms (ONAP, XRAN, etc) have emerged to provide a platform to collect data and share technologies among different 
+vendors and operators. As the wireless network is now evolving into 5G, large amounts of data will be shared in these open source platform and thus create 
 a lot of opportunity to provide better service using these data. The shared data can include a wide variety of measurements, such as the service throughput of the mobile 
 device, the serving cell, the signal strength, etc. In ~\cite{Pantelis2016Localization}, a novel localization algorithm has been proposed to estimate 
 the location when measurement reports are made in LTE systems. The paper shows that the medium accuracy of 20m can be achieved for outdoor mobibles. 
-When celluar network evloves from 4G LTE to 5G, a lot of changes have been made to support lower latency and higher throughput. While multiple input multiple output (MIMO) has been extensively used in LTE, the most profound advancement of technology adopted in 5G
+When celluar network evolves from 4G LTE to 5G, a lot of changes have been made to support lower latency and higher throughput. While multiple input multiple output (MIMO) has been extensively used in LTE, the most profound advancement of technology adopted in 5G
 network is the utilization of a high number of (massive) MIMO antennas especially in the high band. With the use of massive MIMO, transmit power can be effectively beamformed and the mobile will report beam related metric to the base station. 
 Therefore, the approach proposed in ~\cite{Pantelis2016Localization} for LTE can not be used directly for 5G network. In this paper, we propose a new localization algorithm to estimate the location of mobile devices utilizing the new reported metric introduced in 5G network.
  
@@ -165,7 +165,7 @@ the mobile.
 \item The above solution method assumes that the probabilities characterizing the
 underlying Markovian structure can be learned. This is done by performing supervised learning using the beam information of 5G networks.
 The training data for supervised learning may come from
-drive test carried out by network providers once 5G is deployed commein the field. However, given that 5G network deployment is not available in the field during this study, we generate the drive training data and testing data from a 5G simulator.
+drive test carried out by network providers once 5G is deployed commonly in the field. However, given that 5G network deployment is not available in the field during this study, we generate the drive training data and testing data from a 5G simulator.
 	
 \end{enumerate}
 
@@ -206,7 +206,7 @@ measurements of received signal strength on the secondary synchronization (SS) s
 the total measured time-average received power at UE from the SS signals 
 from a {\em given cell transmitter}. 
 
-{\em Beam Indices:} In 5G-NR, there is the concept of a SS/PBCH block on the downink which comprises of a set of symbols ($4$) during which beamformed transmissions in a particular direction from gNB could take place. Each SS/PBCH block is identified by an index which the UE uses to report back measurements during a given SS/block. The beam indices we refer to in this paper correspond to the SS/PBCH block index and can have a range from $0$ to $63$ in standards. We use a grid of beams with upto$56$ possible directions in the performance evaluation section.  
+{\em Beam Indices:} In 5G-NR, there is the concept of a SS/PBCH block on the downink which comprises of a set of symbols ($4$) during which beamformed transmissions in a particular direction from gNB could take place. Each SS/PBCH block is identified by an index which the UE uses to report back measurements during a given SS/block. The beam indices we refer to in this paper correspond to the SS/PBCH block index and can have a range from $0$ to $63$ in standards. We use a grid of beams with upto $56$ possible directions in the performance evaluation section.  
 
 
 
@@ -228,9 +228,8 @@ from a {\em given cell transmitter}.
 
 
 
-{\em ONAP} This stands for Open Nework Automation Platform and provides comprehensive platform for real time policy diven orchestration and automa-
-tion of physcial and virtual network functions that will enable software, network,
-it and cloud providers and developers to rapidly create new services. Figure \ref{fig:onap_arch} shows the high level architecture. It is expected that in the context of $5$G networks and localization topic of this paper, ONAP would orchestrate the localization policy and associated cloud storage within the "Policy framework", "Data Collection, Analytics and Events (DCAE)" and "Service orchestration" components of the run-time module. 
+{\em ONAP} This stands for Open Nework Automation Platform and provides comprehensive platform for real time policy diven orchestration and automation of physcial and virtual network functions that will enable software, network,
+IT and cloud providers and developers to rapidly create new services. Figure \ref{fig:onap_arch} shows the high level architecture. It is expected that in the context of $5$G networks and localization topic of this paper, ONAP would orchestrate the localization policy and associated cloud storage within the "Policy framework", "Data Collection, Analytics and Events (DCAE)" and "Service orchestration" components of the run-time module. 
 
 {\em Measurement data collection architecture:} The NR UE measurement data (NUMD) collection process occurs primarily in the 5G network via the gNB and Mobility Management Entity (MME). The MME serves as the coordinator of the NUMD data.
 After NUMD collection is turned on at the gNodeB, it collects the records and sends
@@ -367,7 +366,7 @@ In the highlevel, the proposed localization algorithm, namely $5GLocalizeAlgo$, 
 
 \begin{figure}[t]
 	\begin{center}
-	\includegraphics[height=3.5in,width=3.2in]{./HMM_ParticleFilter_Illustration.png}
+	\includegraphics[height=3in,width=3.2in]{./HMM_ParticleFilter_Illustration.png}
 	\caption{\label{fig:hmm_particle}
 	{\small Hidden Markov Model and Particle filter}}
 	\end{center}
@@ -422,7 +421,7 @@ Following are the steps to obtain the inference:
 \begin{enumerate}
 
 \item For each location in the training set, we
-take the corresponding reported beam indices. Then, pre-processing is done to separate the data based on the cell ID and whehther it is best beam index, or second/third/fourth best beam index.
+take the corresponding reported beam indices. Then, pre-processing is done to separate the data based on the cell ID and whether it is best beam index, or second/third/fourth best beam index.
 
 \item For each cell, we obtain the likelihood of a certain class (i.e., beam index) using classifier where the latitude and the longitude are 
 taken as features of the model and the likelihood of the beam indices is the output. Different cells are trained using their own data sets. Even for the same
