@@ -120,7 +120,7 @@ wireless operators to trouble shoot the network performance. It can also be used
 limited budget that do not have the capability of GPS. Furthermore, operators may not have access to the GPS information
 on the mobile devices. In this paper, we propose a novel machine learning based approach to estimate the location of the mobile devices 
 based on the measurement data that mobiles reported during every call and session. Our proposed algorithm utilizes the advanced features of 5G wireless network, such as the beam information.
-Simulation shows that the proposed solution can achieve 10~m accuracy for mixed LoS and NLoS environment. And the proposed algorithm can also work even with only the information from one base station. 
+Simulation shows that the proposed solution can achieve 4m accuracy for LoS enviorment and 12m accuracy for mixed LoS and NLoS environment. And the proposed algorithm can also work even with only the information from one base station. 
 
 \end{abstract}
 
@@ -140,7 +140,8 @@ device, the serving cell, the signal strength, etc. In ~\cite{Pantelis2016Locali
 the location when measurement reports are made in LTE systems. The paper shows that the medium accuracy of 20m can be achieved for outdoor mobiles. 
 When cellular network evolves from 4G LTE to 5G, a lot of changes have been made to support lower latency and higher throughput. While multiple input multiple output (MIMO) has been extensively used in LTE, the most profound advancement of technology adopted in 5G
 network is the utilization of a high number of (massive) MIMO antennas especially in the high band. With the use of massive MIMO, transmit power can be effectively beamformed and the mobile will report beam related metric to the base station. 
-Therefore, new positioning algorithms need to be developed for 5G network. In ~\cite{Costca1} ~\cite{Costa2}, the authors propose a two-stage extended Kalman filter (EKF) that is based on reference signal received power (RSRP) measurements. However, the proposed algorithm only works when there are 
+Thus, the same signal characteristics (such as received signal strength, signal to noise ration, etc) may be the same even if the user is served by different beams (thus different locations). Therefore, the existing algorithms without considering the beam information can not be 
+applied directly on 5G and new positioning algorithms need to be developed. In ~\cite{Costca1} ~\cite{Costa2}, the authors propose a two-stage extended Kalman filter (EKF) that is based on reference signal received power (RSRP) measurements. However, the proposed algorithm only works when there are 
 at least two base stations. In 5G network, especially for high band, the cell coverage is limited and 5G cell sites are used to increase the capacity in the hot spot. Thus, there may only be one base station observed by the mobile device.
  ~\cite{Mendrzik1} presents a message passing-based estimator which jointly estimates the position and orientation of the mobile terminal. However, the scheme in ~\cite{Mendrzik1} needs extra message passing between nodes.
 There are other schemes focusing on indoor positioning, which also need the presence of multiple base stations, such as ~\cite{Obeidat1}.
@@ -338,7 +339,7 @@ d_t = \alpha d_{t-1}+(1-\alpha)\bar{d}+\sqrt{(1-\alpha^2)}d_{x_{t-1}}
 
  where $S_t$ and $d_t$ are the new speed and direction of the mobile at time interval t. $S_{x_{t-1}}$ and $d_{x_{t-1}}$
  are random variables from a Gaussian distribution with mean $\bar{S}$ and $\bar{d}$.
- 
+ Please the mean speed $\bar{S}$ is set to be the average speed of the user, which can be roughly estimated based on the terrian, for example, urban, suburban, etc.
  At each time interval the next location is calculated based on the current location, speed, and direction of movement.
 Specifically, at time interval t, a mobile's position is given by the equations.
 
@@ -599,7 +600,9 @@ sklearn ~\cite{sklearn} to avoid the overfitting since we have limited number of
 
 
 In Figure \ref{fig:toyeg}, we show the predicted and actual locations of all mobiles. As it can be seen, the actual locations
-and the estimated locations are quite close. In the following, we present more
+and the estimated locations are quite close. As we only used the information from one base station in our study, some locations may not be tracked closely. This also depends on the shape of the coverage
+area of each beam. Since beam indices are used in the algorithm, the narrower the coverage area of a particular beam, the better the estimation accuracy for the points reporting this beam indices.
+In the following, we present more
 detailed analysis of the results.
 % \begin{figure}[t]
 % 	\begin{center}
@@ -639,7 +642,9 @@ In Figure~\ref{fig:leapperf}, we show the
 accuracy distribution under two different type of RF channel condition, pure line of sight (LoS) and mixed LoS \& non-LoS(NLoS). More details of these scenarios can be found in 
 ~\cite{3gpp38901}. With LoS channel, the median accuracy is around
 $4m$, while with mixed LoS and NLoS channel, the median accuracy is around $12m$.These results have not included additional constraints such as users moving on prescribed paths such as walkways etc. as well as additional columns in the data matrix such as TA, etc. 
-With this additional information, the localization accuracy is expected to improve further.
+With this additional information, the localization accuracy is expected to improve further. 
+
+The next step of our work is to evaluate our proposed algorithm in field data once 5G is deployed in the field. 
 
 \section{Concluding Remarks}
 \label{sec:concl}
