@@ -11,7 +11,7 @@
 \usepackage{cite}
 \usepackage{calc}
 \usepackage{color}
-\usepackage{subfigure}
+%\usepackage{subfigure}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 %\usepackage{enumitem}
@@ -113,14 +113,14 @@ Murray Hill, NJ, USA \\
 
 \begin{abstract}
 
-As wireless networks are evolving into 5G, tremendous data will be shared on the newly developed open source platforms. These data can be used
+As wireless networks are evolving into 5G, tremendous amount of data will be shared on the newly developed open source platforms. These data can be used
 in developing new services. Among which, location information
 of mobile devices are extremely useful. For example, the location information can be used to assist
 wireless operators to trouble shoot the network performance. It can also be used to provide some location assisted service. However, some of these devices may be designed for
 limited budget that do not have the capability of GPS. Furthermore, operators may not have access to the GPS information
 on the mobile devices. In this paper, we propose a novel machine learning based approach to estimate the location of the mobile devices 
 based on the measurement data that mobiles reported during every call and session. Our proposed algorithm utilizes the advanced features of 5G wireless network, such as the beam information.
-Simulation shows that the proposed solution can achieve 10~m accuracy for mixed LoS and NLoS enviorment. And the proposed algorithm can also work even with only the information from one base station. 
+Simulation shows that the proposed solution can achieve 4m accuracy for LoS enviorment and 12m accuracy for mixed LoS and NLoS environment. And the proposed algorithm can also work even with only the information from one base station. 
 
 \end{abstract}
 
@@ -132,16 +132,21 @@ Simulation shows that the proposed solution can achieve 10~m accuracy for mixed 
 %Importance of measurements
 
 Fueled with the emerging cloud technologies (cloud computing, cloud storage, etc), software defined network (SDN) together with 
-network functions virtualization (NFV) is transforming the techonology, and business models in telcommunication industry.
+network functions virtualization (NFV) is transforming the technology, and business models in telecommunication industry.
 Several open source platforms (ONAP, XRAN, etc) have emerged to provide a platform to collect data and share technologies among different 
 vendors and operators. As the wireless network is now evolving into 5G, large amounts of data will be shared in these open source platform and thus create 
 a lot of opportunity to provide better service using these data. The shared data can include a wide variety of measurements, such as the service throughput of the mobile 
 device, the serving cell, the signal strength, etc. In ~\cite{Pantelis2016Localization}, a novel localization algorithm has been proposed to estimate 
-the location when measurement reports are made in LTE systems. The paper shows that the medium accuracy of 20m can be achieved for outdoor mobibles. 
-When celluar network evolves from 4G LTE to 5G, a lot of changes have been made to support lower latency and higher throughput. While multiple input multiple output (MIMO) has been extensively used in LTE, the most profound advancement of technology adopted in 5G
+the location when measurement reports are made in LTE systems. The paper shows that the medium accuracy of 20m can be achieved for outdoor mobiles. 
+When cellular network evolves from 4G LTE to 5G, a lot of changes have been made to support lower latency and higher throughput. While multiple input multiple output (MIMO) has been extensively used in LTE, the most profound advancement of technology adopted in 5G
 network is the utilization of a high number of (massive) MIMO antennas especially in the high band. With the use of massive MIMO, transmit power can be effectively beamformed and the mobile will report beam related metric to the base station. 
-Therefore, the approach proposed in ~\cite{Pantelis2016Localization} for LTE can not be used directly for 5G network. In this paper, we propose a new localization algorithm to estimate the location of mobile devices utilizing the new reported metric introduced in 5G network.
- 
+Thus, the same signal characteristics (such as received signal strength, signal to noise ration, etc) may be the same even if the user is served by different beams (thus different locations). Therefore, the existing algorithms without considering the beam information can not be 
+applied directly on 5G and new positioning algorithms need to be developed. In ~\cite{Costca1} ~\cite{Costa2}, the authors propose a two-stage extended Kalman filter (EKF) that is based on reference signal received power (RSRP) measurements. However, the proposed algorithm only works when there are 
+at least two base stations. In 5G network, especially for high band, the cell coverage is limited and 5G cell sites are used to increase the capacity in the hot spot. Thus, there may only be one base station observed by the mobile device.
+ ~\cite{Mendrzik1} presents a message passing-based estimator which jointly estimates the position and orientation of the mobile terminal. However, the scheme in ~\cite{Mendrzik1} needs extra message passing between nodes.
+There are other schemes focusing on indoor positioning, which also need the presence of multiple base stations, such as ~\cite{Obeidat1}.
+In this paper, we propose a new localization algorithm to estimate the location of mobile devices utilizing the new reported metric introduced in 5G network.
+
 %Our goal - loc and class
 % As the open source platforms (such as ONAP, XRAN, etc) are still being developed,  it provides an opportunity to request different measurement 
 % metrics. 
@@ -180,7 +185,7 @@ The rest of the paper is organized as follows. Section~\ref{sec:bg} provides som
 background and introduces relevant terminologies. Section~\ref{sec:ps} presents
 the problem setting and states the precise localization problem.
 Section~\ref{sec:localalgo}
-presents the main localization algorithm and Section~\ref{sec:channel-model} describes how to get the likehihood of the observation using machine learning approach. 
+presents the main localization algorithm and Section~\ref{sec:channel-model} describes how to get the likelihood of the observation using machine learning approach. 
 We present experimental validation in Section~\ref{sec:eval} and finally we conclude in
 Section~\ref{sec:concl}.
 
@@ -206,7 +211,7 @@ measurements of received signal strength on the secondary synchronization (SS) s
 the total measured time-average received power at UE from the SS signals 
 from a {\em given cell transmitter}. 
 
-{\em Beam Indices:} In 5G-NR, there is the concept of a SS/PBCH block on the downink which comprises of a set of symbols ($4$) during which beamformed transmissions in a particular direction from gNB could take place. Each SS/PBCH block is identified by an index which the UE uses to report back measurements during a given SS/block. The beam indices we refer to in this paper correspond to the SS/PBCH block index and can have a range from $0$ to $63$ in standards. We use a grid of beams with upto $56$ possible directions in the performance evaluation section.  
+{\em Beam Indices:} In 5G-NR, there is the concept of a SS/PBCH block on the downlink which comprises of a set of symbols ($4$) during which beamformed transmissions in a particular direction from gNB could take place. Each SS/PBCH block is identified by an index which the UE uses to report back measurements during a given SS/block. The beam indices we refer to in this paper correspond to the SS/PBCH block index and can have a range from $0$ to $63$ in standards. We use a grid of beams with upto $56$ possible directions in the performance evaluation section.  
 
 
 
@@ -228,8 +233,10 @@ from a {\em given cell transmitter}.
 
 
 
-{\em ONAP} This stands for Open Nework Automation Platform and provides comprehensive platform for real time policy diven orchestration and automation of physcial and virtual network functions that will enable software, network,
-IT and cloud providers and developers to rapidly create new services. Figure \ref{fig:onap_arch} shows the high level architecture as shown in ~\cite{ONAP}. It is expected that in the context of $5$G networks and localization topic of this paper, ONAP would orchestrate the localization policy and associated cloud storage within the "Policy framework", "Data Collection, Analytics and Events (DCAE)" and "Service orchestration" components of the run-time module. 
+
+{\em ONAP} This stands for Open Network Automation Platform and provides comprehensive platform for real time policy driven orchestration and automation of physical and virtual network functions that will enable software, network,
+IT and cloud providers and developers to rapidly create new services. Figure \ref{fig:onap_arch} shows the high level architecture as in ~\cite{ONAP}. It is expected that in the context of $5$G networks and localization topic of this paper, ONAP would orchestrate the localization policy and associated cloud storage within the "Policy framework", "Data Collection, Analytics and Events (DCAE)" and "Service orchestration" components of the run-time module. 
+
 
 {\em Measurement data collection architecture:} The NR UE measurement data (NUMD) collection process occurs primarily in the 5G network via the gNB and Mobility Management Entity (MME). The MME serves as the coordinator of the NUMD data.
 After NUMD collection is turned on at the gNodeB, it collects the records and sends
@@ -310,7 +317,7 @@ cell-$k$ at location $x_i$. Assume that the locations
 are drawn from locations in a road network given by $G_r=(V,E)$. Thus, the problem is to estimate the unknown location of the mobiles when mobiles report a sequence of measurements
 ${\tilde{R}}^j_k(t_i)$ and ${\tilde{B}}^j_k(t_i)$ where $i=1,2,\hdots,L,\ k\in K(t_i), j=1, 2, 3, 4$. $L$ is the length of the sequence of the measurement reports.
 Note that, in the algorithm illustration in this paper, we only focus on SS-RSRP and beam indices. However, in the field, there may be other measurement reports that 
-can be used to help to improve the localization accuary. For example, timing alignment, etc. These addtional measurement reports can be easily incorporated into our proposed algorithm.
+can be used to help to improve the localization accuracy. For example, timing alignment, etc. These additional measurement reports can be easily incorporated into our proposed algorithm.
 
 \section{Localization Algorithms}
 \label{sec:localalgo}
@@ -334,7 +341,7 @@ d_t = \alpha d_{t-1}+(1-\alpha)\bar{d}+\sqrt{(1-\alpha^2)}d_{x_{t-1}}
 
  where $S_t$ and $d_t$ are the new speed and direction of the mobile at time interval t. $S_{x_{t-1}}$ and $d_{x_{t-1}}$
  are random variables from a Gaussian distribution with mean $\bar{S}$ and $\bar{d}$.
- 
+ Please the mean speed $\bar{S}$ is set to be the average speed of the user, which can be roughly estimated based on the terrian, for example, urban, suburban, etc.
  At each time interval the next location is calculated based on the current location, speed, and direction of movement.
 Specifically, at time interval t, a mobile's position is given by the equations.
 
@@ -350,10 +357,10 @@ h_t = h_{t-1} +S_{t-1}sin(d_{t-1})*\Delta t
 where ($l_t$,$h_t$) and ($l_{t-1}$,$h_{t-1}$) are the latitude and longitude coordinates of the mobile’s position 
 at time intervals $t$ and $t-1$, respectively. $\Delta t$ is the duration of the time interval.
 
-However, it is difficlut to obtain analytic solutions for HMM and particle filter has been widely used to provide approximate solutions to these intractable inference problems~\cite{doucet2009tutorial}~\cite{ThrunParticleFilter}.
+However, it is difficult to obtain analytic solutions for HMM and particle filter has been widely used to provide approximate solutions to these intractable inference problems~\cite{doucet2009tutorial}~\cite{ThrunParticleFilter}.
 We also use particle filter approach in this paper. 
 
-In the highlevel, the proposed localization algorithm, namely $5GLocalizeAlgo$, is stated as follows:
+At high level, the proposed localization algorithm, namely $5GLocalizeAlgo$, is stated as follows:
 \begin{itemize}
 	\item We first initialize a set of $N$ particles based on some priori distribution, for example, the coverage map of a base station.
 	Here, particles are the samples of the possibles locations. 
@@ -361,7 +368,7 @@ In the highlevel, the proposed localization algorithm, namely $5GLocalizeAlgo$, 
 	\item Particles move from one state to another state based 
 	on the state transition model given in equations (\ref{eqn:mobilitymodelx}) and (\ref{eqn:mobilitymodely}).
 	\item In the end, the sequence of the particles which have the largest likelihood are the estimated locations. 
-	\item The pseudocode is presented in Algorithm \ref{alg:LocalizeUEpf}. The inpputs are training data $D_{tr}$, the graph $G_r$ and the threashold $N_{th}$ used in resampling particle filter~\cite{ThrunParticleFilter}.
+	\item The pseudocode is presented in Algorithm \ref{alg:LocalizeUEpf}. The inputs are training data $D_{tr}$, the graph $G_r$ and the threshold $N_{th}$ used in resampling particle filter~\cite{ThrunParticleFilter}.
 \end{itemize}
 
 \begin{figure}[t]
@@ -376,7 +383,7 @@ In the highlevel, the proposed localization algorithm, namely $5GLocalizeAlgo$, 
 \caption{$5GLocalizeAlgo(\mathcal{D}_{tr},G,N_{th})$}
 \label{alg:LocalizeUEpf}
 \begin{algorithmic}[1]
-\State Offline inference based on training data $\mathcal{D}_{tr}$ to get the imortance weight associated with each particle. This does not need real time processing.
+\State Offline inference based on training data $\mathcal{D}_{tr}$ to get the importance weight associated with each particle. This does not need real time processing.
 \State Sample $N$ particles $\mathcal{P}_j = \{\hat{x}_1^{(j)},\hat{v}_1^{(j)}\},$ $j=1,\hdots , N$ 
 from prior distribution $p(\tilde{x}_1, \tilde{v}_1|G)$ 
 
@@ -407,10 +414,10 @@ $p(\{\hat{x}^{(n)}\}_{i=1}^L|\{\tilde{R}^{1,2,3,4}_i\}_{i=1}^L,\{\tilde{B}^{1,2,
 
 \section{Observation modeling using machine learning}
 \label{sec:channel-model}
-As mentioned in the above section, one of the important inference of HMM is the likelihood of achieving the observation at the given paritcle. In this section, we discuss how to infer the likehihood using machine learning approach. 
+As mentioned in the above section, one of the important inference of HMM is the likelihood of achieving the observation at the given particle. In this section, we discuss how to infer the likelihood using machine learning approach. 
 \subsection{Inference on likelihood of beam indices}
 \label{sec:prob-classification}
-As part of the observations of HMM model, UE reports up to four observed best beam indices. The probability
+As part of the observations of HMM model, UE reports up to four observed best beam indices. Note that there may be some additional overhead in $5$G-NR to request UE to send measurements for more than one beam. The probability
 distribution (also called the likelihood function) of a particular observed beam index such as its $j$-th ($j=1, 2, 3, 4$) best reported beam indices
 at a given location is denoted by
 $p(\tilde{B}^j_i|\hat{x}_{i})$. In our approach, these probabilities
@@ -425,13 +432,13 @@ take the corresponding reported beam indices. Then, pre-processing is done to se
 
 \item For each cell, we obtain the likelihood of a certain class (i.e., beam index) using classifier where the latitude and the longitude are 
 taken as features of the model and the likelihood of the beam indices is the output. Different cells are trained using their own data sets. Even for the same
-cell, each best beam index will be trained seperately, meaning, the best beam index, the second best beam index, the third best beam index and the fourth best beam index each has their own trained model.
+cell, each best beam index will be trained separately, meaning, the best beam index, the second best beam index, the third best beam index and the fourth best beam index each has their own trained model.
 Each such classifier is trained using the data aggregated in the previous step.
 
 \item There are different machine learning classifiers in the literature. Considering the strong spatial correlation of the beam index, and also we will need to get the probability of class, random forest classifier is considered as a good choice. 
 In this paper, we use the random forest classifier in the machine learning library (sklearn) to predict the probability of 
 reporting a specific beam indices. The function $predict\_proba(X)$ can be used to get the probability of class $X$. Note that different classifiers were tested in the study and we found that
-neruon network and random forest provide similar performance. However, given more intuitive illustration of random forest, we decide to use random forest classifier.
+neural network and random forest provide similar performance. However, given the more intuitive illustration of random forest, we decided to use random forest classifier.
 \end{enumerate}
 \subsection{Inference on likelihood of SS-RSRP}
 \label{sec:prob-reg}
@@ -467,11 +474,11 @@ where $$\sigma_c^2(x) = RndFrst_s(x,b,c) + \sigma_{RF}^2(b,c)\,$$
 and the serving cell-$c$ can be obtained from the NUMD record. $\mathcal{N}$ represents the Gaussian distribution.
 In general, we
 can choose any spatial regressor instead of random forest. However, choosing
-random forest makes the model robust to cell propogation properties and to the
+random forest makes the model robust to cell propagation properties and to the
 fact that the coverage area of the cell could be disjoint.
 \end{enumerate}
 
-Note that in in 5G network, with the existence of beams, the regression algorithn is now implemented per cell and per beam index.
+Note that in a 5G network, with the existence of beams, the regression algorithm is now implemented per cell and per beam index.
 
 \subsection{Inference on the likelihood of combined observations}
 \label{sec:prob-combined}
@@ -567,11 +574,11 @@ In this section, we present evaluation results of our proposed algorithm.
 In this paper, we focus on one isolated cell in 5G network, where the measurement report
 only has the information of the serving cell. In the field, when we have multiple cells, the additional
 information on the measurement report from neighboring cells can be easily incorporated into the proposed algorithm to improve the 
-localization accuary. This could include information such as RSRQ and RSSI. As there is no commercial deployed 5G network yet, we dont have the drive test data from the field.
+localization accuracy. This could include information such as RSRQ and RSSI. As there is no commercial deployed 5G network yet, we do not have the drive test data from the field.
 Instead, we use our 5G system simulator to generate both training data and test data.
 
 The 5G system that we use in this evaluation is operating at mmwave band, and the cell ISD is 200m. The testing data points are illustrated in 
-Figure ~\ref{fig:training}, which has 1000 data points. Instead of diving the training data into training and validation, we use the gridsearch and cross validation functionaility in 
+Figure ~\ref{fig:training}, which has 1000 data points. Instead of diving the training data into training and validation, we use the gridsearch and cross validation functionality in 
 sklearn ~\cite{sklearn} to avoid the overfitting since we have limited number of training data.
 
 \begin{figure}[t]
@@ -595,7 +602,9 @@ sklearn ~\cite{sklearn} to avoid the overfitting since we have limited number of
 
 
 In Figure \ref{fig:toyeg}, we show the predicted and actual locations of all mobiles. As it can be seen, the actual locations
-and the estimated locations are quite close. In the following, we present more
+and the estimated locations are quite close. As we only used the information from one base station in our study, some locations may not be tracked closely. This also depends on the shape of the coverage
+area of each beam. Since beam indices are used in the algorithm, the narrower the coverage area of a particular beam, the better the estimation accuracy for the points reporting this beam indices.
+In the following, we present more
 detailed analysis of the results.
 % \begin{figure}[t]
 % 	\begin{center}
@@ -631,18 +640,20 @@ detailed analysis of the results.
 % the random forest classifier will divided the whole area into smaller region. The accuracy score \textbf{[QUESTION: should we define what accuracy score means? Is a value of 1 the best?]}  for LoS is 0.78 and for mixed LoS\&NLoS case is 0.57.
 
 %{\em Accuracy CDF:} 
-In Figure~\ref{fig:cdf1} and Figure~\ref{fig:cdf2}, we show the
-accuracy distribution under two different type of RF channel condition, pure line of sight (LoS) and mixed LoS \& non-LoS(NLoS). More details of these scearions can be found in 
+In Figure~\ref{fig:leapperf}, we show the
+accuracy distribution under two different type of RF channel condition, pure line of sight (LoS) and mixed LoS \& non-LoS(NLoS). More details of these scenarios can be found in 
 ~\cite{3gpp38901}. With LoS channel, the median accuracy is around
 $4m$, while with mixed LoS and NLoS channel, the median accuracy is around $12m$.These results have not included additional constraints such as users moving on prescribed paths such as walkways etc. as well as additional columns in the data matrix such as TA, etc. 
-With this additional information, the localization accuracy is expected to improve further.
+With this additional information, the localization accuracy is expected to improve further. 
+
+The next step of our work is to evaluate our proposed algorithm in field data once 5G is deployed in the field. 
 
 \section{Concluding Remarks}
 \label{sec:concl}
 
 In this paper, we have developed localization algorithms of mobile devices in 5G networks based on the measurement records 
 We have shown median accuracy of 4m in LoS enviorment and 12m in mixed LoS and NLoS enviorments. 
-The above results have not consider the contraint of the road, terrance etc, which limit the potential location of the mobile devices. With this consideration,
+The above results have not considered the constraint of the road, terrace etc, which limit the potential location of the mobile devices. With this consideration,
 the accuracy is expected to be better.  
 
 
